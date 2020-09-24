@@ -31,6 +31,7 @@ def delete(container_id, NETID):
   if container_id < 100:
     print("The container ID must be at least 100. Please try again.")
     exit()
+  print(f"Starting deletion for {NETID}...")
   cmd = f"lxc-destroy -f {container_id}"
   res = subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
   if res != 0 and res !=1:      #if there is an error
@@ -62,7 +63,7 @@ def delete_multiple():
     exit()
   to_delete = RANGE_START
   for student in range(int(RANGE_START),int(RANGE_END)):
-    delete(int(to_delete), "VM ID:" + to_delete)
+    delete(int(to_delete), "VM ID:" + str(to_delete))
     to_delete += 1
   print(f"All servers between {RANGE_START} and {RANGE_END} were deleted!")
 
