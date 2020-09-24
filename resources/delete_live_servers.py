@@ -41,6 +41,11 @@ def delete_one(NETID):
     if res != 0:
       print(f"The server for {NETID} could not be deleted.")
       exit()
+    cmd = f"pct destroy {container_id}"
+    res = subprocess.run(shlex.split(cmd), stdout=subprocess.PIPE)
+    if res != 0:
+      print(f"The server for {NETID} could not be deleted.")
+      exit()
     print(f"Server deleted for {NETID}!")
   else:
     exit()
