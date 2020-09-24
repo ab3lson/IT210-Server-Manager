@@ -55,15 +55,15 @@ def delete(container_id, NETID):
     print(f"Server deleted for {NETID}!")
 
 def delete_multiple():
-  RANGE_START = input("What VM ID do you want to start at?:")
-  RANGE_END = input("What VM ID do you want to end at?:")
+  RANGE_START = int(input("What VM ID do you want to start at?:"))
+  RANGE_END = int(input("What VM ID do you want to end at?:"))
   confirm = input(f"Are you sure that you want to delete all servers between {RANGE_START} and {RANGE_END}? (Y/N): ")
   if not confirm in ['Y', 'y']:
     print("Whew! Exiting...")
     exit()
   to_delete = RANGE_START
-  for student in range(int(RANGE_START),int(RANGE_END)):
-    delete(int(to_delete), "VM ID:" + str(to_delete))
+  for student in range(RANGE_START, RANGE_END):
+    delete(to_delete, "VM ID:" + str(to_delete))
     to_delete += 1
   print(f"All servers between {RANGE_START} and {RANGE_END} were deleted!")
 
