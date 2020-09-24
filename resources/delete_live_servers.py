@@ -43,9 +43,9 @@ def delete(container_id, NETID):
     if res != 0:
       print(f"The server for {NETID} could not be deleted.")
       exit()
-    print(f"\033[FDELETED: Server deleted for {NETID}!")
+    print(f"\033[F[DELETED] Server deleted for {NETID}!")
   else:          #if lxc-destroy worked and the container shut down, now it can be deleted from ProxMox
-    print("Waiting 10 seconds for shutdown...")
+    print("[WAIT] Shutting down container...")
     time.sleep(10)
     cmd = f"pct destroy {container_id}"
     res = subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -53,7 +53,7 @@ def delete(container_id, NETID):
       print(f"""The server for {NETID} could not be deleted. The container may have been stopping, but didn't finish.
       Try again in a couple seconds or check the web GUI to see if it is still active.""")
       exit()
-    print(f"\033[F\033[FDELETED: Server deleted for {NETID}!")
+    print(f"\033[F\033[F[DELETED] Server deleted for {NETID}!")
 
 def delete_multiple():
   RANGE_START = int(input("What VM ID do you want to start at?:"))
