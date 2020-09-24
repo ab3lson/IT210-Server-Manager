@@ -46,7 +46,7 @@ if __name__ == "__main__":
   elif args.create_one:
     print("-co was selected")
     print("The NetID is:", args.create_one[0])
-    create_live_servers.create_one(args.create[0])
+    create_live_servers.create_one(args.create_one[0])
   elif args.delete:
     print("-d was selected")
     print("The NetID is:", args.delete[0])
