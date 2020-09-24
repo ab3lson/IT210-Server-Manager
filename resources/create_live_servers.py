@@ -3,6 +3,7 @@ import os
 import subprocess
 import shlex
 
+ADMIN_START_IP=50
 START_IP = 60     #This is the start of the last octet that will be used for students in 192.168.10.0/24
 END_IP = 255
 class Student:
@@ -11,9 +12,9 @@ class Student:
     self.last_name = last_name
     self.netID = netID
 
-def create(student, IP=START_IP):
-  if int(IP) > END_IP:
-    print(f"ERROR: Trying to create an IP out of the 192.168.10.0/24 subnet. Trying to create 192.168.10.{IP}.\nStopping!")
+def create(student, IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
+  if ADMIN_START_IP > int(IP) > END_IP:
+    print(f"ERROR: Trying to create an IP out of the 192.168.10.50-255 range. Trying to create 192.168.10.{IP}.\nStopping!")
     exit()
   next_vm_id = subprocess.run(['pvesh', 'get', '/cluster/nextid'], stdout=subprocess.PIPE).stdout.decode('utf-8')[:-1]
   return_val = os.system(f"""pct create {next_vm_id} \
@@ -38,9 +39,9 @@ def get_next_IP(START_IP=START_IP, END_IP=END_IP):
       cmd = f"ping -c 1 -w 1 192.168.10.{str(ip + 1)}"
       second_res = subprocess.run(shlex.split(cmd), stdout=subprocess.DEVNULL)
       if second_res != 0:
-        print("COMFIRMED!")
+        print("CONFIRMED!")
         return "192.168.10." + str(ip)
-      print("Next IP occupied.. Trying to find another!")
+      print("FAILURE!\nNext IP occupied.. Trying to find another!")
   print("ERROR: No empty IP addresses were found in 192.168.10.60-255. Please look into this and try again.")
   exit()
 
@@ -75,11 +76,11 @@ def create_multiple(FILENAME):
     START_IP += 1
 
 
-def create_one(NETID, START_IP=START_IP, END_IP=END_IP):
+def create_one(NETID, START_IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
   temp_student = Student(NETID, NETID, NETID)
   is_admin = input("Is this an admin/TA account? (Y/N): ")
   if is_admin in ["Y","y"]:
-    START_IP = 50
+    START_IP = ADMIN_START_IP
     END_IP = 59
   next_ip = get_next_IP(START_IP, END_IP)
   custom_ip = input(f"The next available IP address is: {next_ip} Do you want to use this IP address? (Y/N): ")
