@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
   create.add_argument('-c','--create', type=str, action='store', metavar='PATH', nargs=1, help='creates a live server for each student in the class from a csv')
   create.add_argument('-co', '--create-one', action='store', metavar='NETID', nargs=1, type=str, help='creates a live server for one student')
-  delete.add_argument('-d','--delete', nargs='?', metavar='RANGE', help='deletes a given range of live servers')
+  delete.add_argument('-d','--delete', nargs='?', const='no_args', metavar='RANGE', help='deletes a given range of live servers')
   delete.add_argument('-do','--delete-one', type=str, action='store', metavar='NETID', nargs=1, help='deletes a live server for one student')
   admin.add_argument('-e','--enter', type=str, action='store', metavar='NETID', nargs=1, help='enter a student\'s live server')
   admin.add_argument('-l','--list', type=str, action='store', metavar='NETID', nargs='?', const='all_students', help='display a list of paired NetIDs and VM IDs')
