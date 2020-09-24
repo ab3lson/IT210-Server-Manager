@@ -12,15 +12,7 @@ class Student:
     self.last_name = last_name
     self.netID = netID
 
-
-def delete_multiple(START_IP=START_IP, END_IP=END_IP):
-  
-  for student in range(START_IP,END_IP):
-    #pct destroy <CONTAINER ID>
-    pass
-
-
-def delete_one(NETID):
+def get_vmid(NETID):
   #match student netID to container ID
   cmd = "pct list | tail -n+2 | awk '{print $1 \",\"$3}'"
   vm_ids = subprocess.check_output(cmd, shell=True).decode("utf-8") 
@@ -32,29 +24,49 @@ def delete_one(NETID):
   if not container_id:
     print(f"The netID {NETID} could not be found. Please make sure that it exists and try again.")
     exit()
-  confirm = input(f"Are you sure that you want to delete the account for {NETID} (VM ID: {container_id})? (Y/N): ")
-  if confirm in ['Y', 'y']:
-    cmd = f"lxc-destroy -f {container_id}"
+  return container_id
+
+def delete(container_id):
+  cmd = f"lxc-destroy -f {container_id}"
+  res = subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+  if res != 0 and res !=1:      #if there is an error
+    print(f"The server for {NETID} could not be deleted.")
+    exit()
+  elif res == 1:                          # if the container deletion failed the first time, it may have been shutting down still
+    cmd = f"pct destroy {container_id}"   # the lxc-destroy throws a 1 if this was the case
     res = subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    if res != 0 and res !=1:      #if there is an error
+    if res != 0:
       print(f"The server for {NETID} could not be deleted.")
       exit()
-    elif res == 1:                          # if the container deletion failed the first time, it may have been shutting down still
-      cmd = f"pct destroy {container_id}"   # the lxc-destroy throws a 1 if this was the case
-      res = subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-      if res != 0:
-        print(f"The server for {NETID} could not be deleted.")
-        exit()
-    else:          #if lxc-destroy worked and the container shut down, now it can be deleted from ProxMox
-      print("Waiting 10 seconds per machine for shutdown.")
-      time.sleep(10)
-      cmd = f"pct destroy {container_id}"
-      res = subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-      if res != 0:
-        print(f"""The server for {NETID} could not be deleted. The container may have been stopping, but didn't finish.
-        Try again in a couple seconds or check the web GUI to see if it is still active.""")
-        exit()
-      print(f"Server deleted for {NETID}!")
+  else:          #if lxc-destroy worked and the container shut down, now it can be deleted from ProxMox
+    print("Waiting 10 seconds per machine for shutdown.")
+    time.sleep(10)
+    cmd = f"pct destroy {container_id}"
+    res = subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    if res != 0:
+      print(f"""The server for {NETID} could not be deleted. The container may have been stopping, but didn't finish.
+      Try again in a couple seconds or check the web GUI to see if it is still active.""")
+      exit()
+    print(f"Server deleted for {NETID}!")
+
+def delete_multiple(START_IP=START_IP, END_IP=END_IP):
+  RANGE_START = input("What IP do you want to start at?: 192.168.10.")
+  RANGE_START = input("What IP do you want to end at?: 192.168.10.")
+  confirm = input(f"Are you sure that you want to delete all servers between 192.168.10.{RANGE_START}-{RANGE_END}? (Y/N): ")
+  if not confirm in ['Y', 'y']:
+    print("Whew! Exiting...")
+    exit()
+  for student in range(START_IP,END_IP):
+    
+    pass
+
+
+def delete_one(NETID):
+  #match student netID to container ID
+  container_id = get_vmid(NETID)
+  confirm = input(f"Are you sure that you want to delete the account for {NETID} (VM ID: {container_id})? (Y/N): ")
+  if confirm in ['Y', 'y']:
+    delete(container_id)
   else:
     exit()
 
