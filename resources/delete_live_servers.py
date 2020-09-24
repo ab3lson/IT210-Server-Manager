@@ -27,7 +27,7 @@ def delete_one(NETID):
   container_info = [row for row in csv.reader(vm_ids.splitlines(), delimiter=',')]
   container_id = False
   for container in container_info:
-    if container[1] == NETID:
+    if container[1][:-6] == NETID:    #strips "Server" away from the container's hostname to see if it matches
       container_id = container[0]
   if not container_id:
     print(f"The netID {NETID} could not be found. Please make sure that it exists and try again.")
@@ -47,6 +47,3 @@ def delete_one(NETID):
 if __name__ == "__main__":
   START_IP = input("What is the start of the IP range to delete?: 192.168.10.")
   END_IP = input("What is the end of the IP range to delete?: 192.168.10.")
-
-test = '''"df /dev/sda1 | awk /'NR==2 {sub("%","",$5); if ($5 >= 80) {printf "Warning! Space usage is %d%%", $5}}"'''
-cmd = "pct list | tail -n+2 | awk '{print $1 \", \"$3}'"

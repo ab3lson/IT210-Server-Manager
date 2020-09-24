@@ -38,7 +38,6 @@ if __name__ == "__main__":
   if len(sys.argv) < 2:
     main_menu()
 
-  print("ARGS:",args)
   if args.create:
     print("-c was selected")
     print("The filepath is:", args.create[0])
