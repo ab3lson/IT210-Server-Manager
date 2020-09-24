@@ -37,13 +37,13 @@ def delete_one(NETID):
   confirm = input(f"Are you sure that you want to delete the account for {NETID} (VM ID: {container_id})? (Y/N): ")
   if confirm in ['Y', 'y']:
     cmd = f"lxc-destroy -f {container_id}"
-    res = subprocess.call(shlex.split(cmd), stdout=subprocess.PIPE)
+    res = subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL)
     if res != 0 and res !=1:      #if there is an error
       print(f"The server for {NETID} could not be deleted.")
       exit()
     elif res == 1:                          # if the container deletion failed the first time, it may have been shutting down still
       cmd = f"pct destroy {container_id}"   # the lxc-destroy throws a 1 if this was the case
-      res = subprocess.call(shlex.split(cmd), stdout=subprocess.PIPE)
+      res = subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL)
       if res != 0:
         print(f"The server for {NETID} could not be deleted.")
         exit()
@@ -51,7 +51,7 @@ def delete_one(NETID):
       print("Waiting 10 seconds per machine for shutdown.")
       time.sleep(10)
       cmd = f"pct destroy {container_id}"
-      res = subprocess.call(shlex.split(cmd), stdout=subprocess.PIPE)
+      res = subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL)
       if res != 0:
         print(f"""The server for {NETID} could not be deleted. The container may have been stopping, but didn't finish.
         Try again in a couple seconds or check the web GUI to see if it is still active.""")
