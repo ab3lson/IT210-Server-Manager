@@ -56,7 +56,7 @@ def delete(container_id, NETID):
 
 def delete_multiple():
   RANGE_START = int(input("What VM ID do you want to start at?:"))
-  RANGE_END = int(input("What VM ID do you want to end at?:"))
+  RANGE_END = int(input("What VM ID do you want to end at?:")) + 1
   confirm = input(f"Are you sure that you want to delete all servers between {RANGE_START} and {RANGE_END}? (Y/N): ")
   if not confirm in ['Y', 'y']:
     print("Whew! Exiting...")
@@ -78,5 +78,5 @@ def delete_one(NETID):
 
 
 if __name__ == "__main__":
-  START_IP = input("What is the start of the IP range to delete?: 192.168.10.")
-  END_IP = input("What is the end of the IP range to delete?: 192.168.10.")
+  START_IP = input("What VM ID do you want to start at?:")
+  END_IP = input("What VM ID do you want to end at?:")
