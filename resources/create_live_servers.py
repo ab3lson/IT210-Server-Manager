@@ -2,6 +2,7 @@ import csv
 import os
 import subprocess
 import shlex
+import time
 
 ADMIN_START_IP=50
 START_IP = 60     #This is the start of the last octet that will be used for students in 192.168.10.0/24
@@ -28,6 +29,8 @@ def create(student, IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
   if return_val != 0:
     print(f"ERROR: There was an issue creating a live server for {student.netID}! Please check the above error code and try again.")
     exit()
+  print(f"Account created for {student.netID}: ssh webadmin@192.168.10.{IP}!")
+
 
 def get_next_IP(START_IP=START_IP, END_IP=END_IP):
   print("Checking for next available IP address. Please wait...")
@@ -70,10 +73,11 @@ def create_multiple(FILENAME):
   for student in student_list:
     print("First Name:", student.first_name, "\tLast Name:", student.last_name, "\tNetID:", student.netID)
   
+  START_IP = get_next_IP(START_IP, END_IP)
   for student in student_list:
-    create(student)
-    next_vm_id += 1
+    create(student, START_IP)
     START_IP += 1
+  exit()
 
 
 def create_one(NETID, START_IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
@@ -87,8 +91,7 @@ def create_one(NETID, START_IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_STA
   if custom_ip in ["N","n"]:
     next_ip = "192.168.10." + input(f"Enter the last two digits of the IP address: 192.168.10.")
   create(temp_student, next_ip[-2:])
-  print(f"Account created for {NETID}: ssh webadmin@{next_ip}!")
-
+  exit()
 
 if __name__ == "__main__":
   FILENAME = input("What is the name of the .csv file?")
