@@ -43,6 +43,7 @@ def delete(container_id, NETID):
     if res != 0:
       print(f"The server for {NETID} could not be deleted.")
       exit()
+    print(f"\033[FDELETED: Server deleted for {NETID}!")
   else:          #if lxc-destroy worked and the container shut down, now it can be deleted from ProxMox
     print("Waiting 10 seconds for shutdown...")
     time.sleep(10)
