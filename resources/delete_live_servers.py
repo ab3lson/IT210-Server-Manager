@@ -28,6 +28,7 @@ def delete_one(NETID):
   container_id = False
   print(container_info)
   for container in container_info:
+    print(f"Does {container[1][:-6]} match {NETID}?")
     if container[1][:-6] == NETID:    #strips "Server" away from the container's hostname to see if it matches
       container_id = container[0]
   if not container_id:
