@@ -21,7 +21,7 @@ def create(student, IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
   return_val = os.system(f"""pct create {next_vm_id} \
                 /var/lib/vz/template/cache/ubuntu-20.04-210-student-template.tar.gz \
                 --cores 2 --cpuunits 2048 --memory 4096 --swap 512 \
-                --hostname {student.netID}Server \
+                --hostname {student.netID}-210 \
                 --net0 name=eth0,ip=192.168.10.{IP}/24,bridge=vmbr0,gw=192.168.4.1 \
                 --rootfs local-lvm:16 \
                 --onboot 1 --start 1
@@ -47,7 +47,6 @@ def get_next_IP(START_IP=START_IP, END_IP=END_IP):
       print("FAILURE!\nNext IP occupied.. Trying to find another!")
   print("ERROR: No empty IP addresses were found in 192.168.10.60-255. Please look into this and try again.")
   exit()
-
 
 def create_multiple(FILENAME, START_IP=START_IP):
   student_list = []
