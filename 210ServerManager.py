@@ -27,13 +27,16 @@ if __name__ == "__main__":
 
   create.add_argument('-c','--create', type=str, action='store', metavar='PATH', nargs=1, help='creates a live server for each student in the class from a csv')
   create.add_argument('-co', '--create-one', action='store', metavar='NETID', nargs=1, type=str, help='creates a live server for one student')
-  delete.add_argument('-d','--delete', nargs='*', help='deletes a given range of live servers')
+  delete.add_argument('-d','--delete', nargs='?', metavar='RANGE', help='deletes a given range of live servers')
   delete.add_argument('-do','--delete-one', type=str, action='store', metavar='NETID', nargs=1, help='deletes a live server for one student')
   admin.add_argument('-e','--enter', type=str, action='store', metavar='NETID', nargs=1, help='enter a student\'s live server')
-  
+  admin.add_argument('-l','--list', type=str, action='store', metavar='NETID', nargs='?', const='all_students', help='display a list of paired NetIDs and VM IDs')
+
+
   parser.add_argument('-h','--help', action='help', help='show this help message and exit')
 
   args = parser.parse_args()
+
   if len(sys.argv) < 2:
     main_menu()
 
@@ -43,13 +46,15 @@ if __name__ == "__main__":
     create_live_servers.create_multiple(args.create[0])
   elif args.create_one:
     create_live_servers.create_one(args.create_one[0])
-  elif args.delete == [] or args.delete:
+  elif args.delete == [] or args.delete:  #no argument is possible
     delete_live_servers.delete_multiple()
   elif args.delete_one:
     delete_live_servers.delete_one(args.delete_one[0])
   elif args.enter:
     print("-e was selected")
     print("The NetID is:", args.enter[0])
+  elif args.list == [] or args.list:  #no argument is required
+    admin_tools.list(args.list)  #passes NetID if provided
   else:
     raise Exception("Invalid arguments were chosen.")
     exit()
