@@ -43,8 +43,6 @@ if __name__ == "__main__":
     print("The filepath is:", args.create[0])
     create_live_servers.create_multiple(args.create[0])
   elif args.create_one:
-    print("-co was selected")
-    print("The NetID is:", args.create_one[0])
     create_live_servers.create_one(args.create_one[0])
   elif args.delete:
     print("-d was selected")

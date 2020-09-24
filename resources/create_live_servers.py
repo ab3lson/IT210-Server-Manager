@@ -29,16 +29,16 @@ def create(student, IP=START_IP):
     exit()
 
 def get_next_IP(START_IP=START_IP, END_IP=END_IP):
-  print("Checking for next available IP address... Please wait")
+  print("Checking for next available IP address. Please wait...")
   for ip in range(START_IP, END_IP):
     cmd = f"ping -c 1 -w 1 192.168.10.{str(ip)}"
     res = subprocess.run(shlex.split(cmd), stdout=subprocess.DEVNULL)
     if res != 0:
-      print(f"192.168.10.{str(ip)} should be open... Checking next IP to confirm.")
+      print(f"Confirming 192.168.10.{str(ip)} ... ", end='')
       cmd = f"ping -c 1 -w 1 192.168.10.{str(ip + 1)}"
       second_res = subprocess.run(shlex.split(cmd), stdout=subprocess.DEVNULL)
       if second_res != 0:
-        print(f"192.168.10.{str(ip)} confirmed!")
+        print("COMFIRMED!")
         return "192.168.10." + str(ip)
       print("Next IP occupied.. Trying to find another!")
   print("ERROR: No empty IP addresses were found in 192.168.10.60-255. Please look into this and try again.")
@@ -82,8 +82,8 @@ def create_one(NETID, START_IP=START_IP, END_IP=END_IP):
     START_IP = 50
     END_IP = 59
   next_ip = get_next_IP(START_IP, END_IP)
-  custom_ip = input(f"The next available IP address is: {next_ip} Do you want a different IP address? (Y/N): ")
-  if custom_ip in ["Y","y"]:
+  custom_ip = input(f"The next available IP address is: {next_ip} Do you want to use this IP address? (Y/N): ")
+  if custom_ip in ["N","n"]:
     next_ip = "192.168.10." + input(f"Enter the last two digits of the IP address: 192.168.10.")
   create(temp_student, next_ip[-2:])
   print(f"Account created for {NETID}: ssh webadmin@{next_ip}!")
