@@ -42,10 +42,11 @@ if __name__ == "__main__":
   if args.create:
     print("-c was selected")
     print("The filepath is:", args.create[0])
-    create_live_servers.create_servers(args.create[0])
+    create_live_servers.create_multiple(args.create[0])
   elif args.create_one:
     print("-co was selected")
     print("The NetID is:", args.create_one[0])
+    create_live_servers.create_one(args.create[0])
   elif args.delete:
     print("-d was selected")
     print("The NetID is:", args.delete[0])
