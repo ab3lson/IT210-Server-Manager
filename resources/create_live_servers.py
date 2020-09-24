@@ -84,9 +84,9 @@ def create_one(NETID, START_IP=START_IP, END_IP=END_IP):
   next_ip = get_next_IP(START_IP, END_IP)
   custom_ip = input(f"The next available IP address is: {next_ip} Do you want a different IP address? (Y/N): ")
   if custom_ip in ["Y","y"]:
-    custom_ip = input(f"Enter the last two digits of the IP address: 192.168.10.")
-    create(temp_student, custom_ip)
-  else: create(temp_student, next_ip[-2:])
+    next_ip = "192.168.10." + input(f"Enter the last two digits of the IP address: 192.168.10.")
+  create(temp_student, next_ip[-2:])
+  print(f"Account created for {NETID}@{next_ip}!")
 
 
 if __name__ == "__main__":
