@@ -49,7 +49,7 @@ def get_next_IP(START_IP=START_IP, END_IP=END_IP):
   exit()
 
 
-def create_multiple(FILENAME):
+def create_multiple(FILENAME, START_IP=START_IP):
   student_list = []
   if ".csv" not in FILENAME:
     print(f"ERROR: The supplied filename, {FILENAME} does not appear to be a .csv file.")
