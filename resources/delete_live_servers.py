@@ -37,7 +37,7 @@ def delete_one(NETID):
   confirm = input(f"Are you sure that you want to delete the account for {NETID} (VM ID: {container_id})? (Y/N): ")
   if confirm in ['Y', 'y']:
     cmd = f"lxc-destroy -f {container_id}"
-    res = subprocess.run(shlex.split(cmd), stdout=subprocess.PIPE)
+    res = subprocess.call(shlex.split(cmd), stdout=subprocess.PIPE)
     if res != 0 and res !=1:      #if there is an error
       print(f"The server for {NETID} could not be deleted.")
       exit()
