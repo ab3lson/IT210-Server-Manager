@@ -22,7 +22,7 @@ def create(student, IP=START_IP):
                 --hostname {student.netID}Server \
                 --net0 name=eth0,ip=192.168.10.{IP}/24,bridge=vmbr0,gw=192.168.4.1 \
                 --rootfs local-lvm:16 \
-                --onboot 1
+                --onboot 1 --start 1
               """)
   if return_val != 0:
     print(f"ERROR: There was an issue creating a live server for {student.netID}! Please check the above error code and try again.")
@@ -86,7 +86,7 @@ def create_one(NETID, START_IP=START_IP, END_IP=END_IP):
   if custom_ip in ["Y","y"]:
     next_ip = "192.168.10." + input(f"Enter the last two digits of the IP address: 192.168.10.")
   create(temp_student, next_ip[-2:])
-  print(f"Account created for {NETID}@{next_ip}!")
+  print(f"Account created for {NETID}: ssh webadmin@{next_ip}!")
 
 
 if __name__ == "__main__":
