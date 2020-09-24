@@ -22,7 +22,7 @@ def delete_multiple(START_IP=START_IP, END_IP=END_IP):
 
 def delete_one(NETID):
   #match student netID to container ID
-  cmd = "pct list | tail -n+2 | awk '{print $1 \", \"$3}'"
+  cmd = "pct list | tail -n+2 | awk '{print $1 \",\"$3}'"
   vm_ids = subprocess.check_output(cmd, shell=True).decode("utf-8") 
   container_info = [row for row in csv.reader(vm_ids.splitlines(), delimiter=',')]
   container_id = False
