@@ -73,9 +73,9 @@ def create_multiple(FILENAME, START_IP=START_IP):
   for student in student_list:
     print("First Name:", student.first_name, "\tLast Name:", student.last_name, "\tNetID:", student.netID)
   
-  START_IP = get_next_IP(START_IP, END_IP)
+  next_ip = get_next_IP(START_IP, END_IP)
   for student in student_list:
-    create(student, START_IP)
+    create(student, next_ip[-2:])
     START_IP += 1
   exit()
 
