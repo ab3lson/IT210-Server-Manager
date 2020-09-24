@@ -15,7 +15,7 @@ class Student:
     self.netID = netID
 
 def list(NETID):
-  cmd = "pct list | awk '{sub(/Server/,""); print $1 \"    \"$3}'"
+  cmd = "pct list | awk '{sub(/Server/,\"\"); print $1 \"    \"$3}'"
   if NETID != "all_students":
     #match student netID to container ID
     vm_ids = subprocess.check_output(cmd, shell=True).decode("utf-8") 
