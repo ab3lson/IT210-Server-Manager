@@ -26,6 +26,7 @@ def delete_one(NETID):
   vm_ids = subprocess.check_output(cmd, shell=True).decode("utf-8") 
   container_info = [row for row in csv.reader(vm_ids.splitlines(), delimiter=',')]
   container_id = False
+  print(container_info)
   for container in container_info:
     if container[1][:-6] == NETID:    #strips "Server" away from the container's hostname to see if it matches
       container_id = container[0]
