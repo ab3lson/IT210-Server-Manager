@@ -27,7 +27,7 @@ def get_vmid(NETID):
     exit()
   return container_id
 
-def delete(container_id):
+def delete(container_id, NETID):
   cmd = f"lxc-destroy -f {container_id}"
   res = subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
   if res != 0 and res !=1:      #if there is an error
@@ -67,7 +67,7 @@ def delete_one(NETID):
   container_id = get_vmid(NETID)
   confirm = input(f"Are you sure that you want to delete the account for {NETID} (VM ID: {container_id})? (Y/N): ")
   if confirm in ['Y', 'y']:
-    delete(container_id)
+    delete(container_id, NETID)
   else:
     exit()
 
