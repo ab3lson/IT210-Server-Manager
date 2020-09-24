@@ -2,6 +2,7 @@ import os
 import subprocess
 import shlex
 import csv
+import time
 
 
 START_IP = 60     #This is the start of the last octet that will be used for students in 192.168.10.0/24
