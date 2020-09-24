@@ -50,8 +50,6 @@ if __name__ == "__main__":
     print("-d was selected")
     print("The NetID is:", args.delete[0])
   elif args.delete_one:
-    print("-do was selected")
-    print("The NetID is:", args.delete_one[0])
     delete_live_servers.delete_one(args.delete_one[0])
   elif args.enter:
     print("-e was selected")
