@@ -15,9 +15,9 @@ class Student:
     self.netID = netID
 
 def list(NETID):
+  cmd = "pct list | awk '{sub(/Server/,""); print $1 \"    \"$3}'"
   if NETID != "all_students":
     #match student netID to container ID
-    cmd = "pct list | awk '{print $1 \"    \"$3}'"
     vm_ids = subprocess.check_output(cmd, shell=True).decode("utf-8") 
     container_info = [row for row in csv.reader(vm_ids.splitlines(), delimiter=',')]
     container_id = False
@@ -29,6 +29,5 @@ def list(NETID):
       exit()
     print(f"NetID\tVM ID\n-----\t----\n{NETID}\t{container_id}")
   else:
-    cmd = "pct list | awk '{print $1 \"    \"$3}'"
     print(subprocess.check_output(cmd, shell=True).decode("utf-8"))
     

@@ -28,7 +28,7 @@ def get_vmid(NETID):
   return container_id
 
 def delete(container_id, NETID):
-  if container_id < 100:
+  if int(container_id) < 100:
     print("The container ID must be at least 100. Please try again.")
     exit()
   print(f"Starting deletion for {NETID}...")
