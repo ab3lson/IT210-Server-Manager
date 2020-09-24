@@ -24,7 +24,7 @@ def delete_one(NETID):
   #match student netID to container ID
   cmd = "pct list | tail -n+2 | awk '{print $1 \", \"$3}'"
   vm_ids = subprocess.check_output(cmd, shell=True).decode("utf-8") 
-  container_info = [row for row in csv.reader(x.splitlines(), delimiter=',')]
+  container_info = [row for row in csv.reader(vm_ids.splitlines(), delimiter=',')]
   container_id = False
   for container in container_info:
     if container[1] == NETID:
