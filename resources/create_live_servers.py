@@ -118,7 +118,7 @@ def create_one(NETID, START_IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_STA
     END_IP = 59
     IS_ADMIN = 1
   next_ip = get_next_IP(START_IP, END_IP)
-  print(f"{color.YELLOW}[INFO]{color.RESET} The next available IP address is: {color.BLUE}192.168.10.{next_ip + color.RESET}")
+  print(f"{color.YELLOW}[INFO]{color.RESET} The next available IP address is: {color.BLUE}192.168.10.{str(next_ip) + color.RESET}")
   custom_ip = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to use this IP address? (Y/N): ")
   if custom_ip in ["N","n"]:
     next_ip = input(f"Enter the last two digits of the IP address: 192.168.10.")
