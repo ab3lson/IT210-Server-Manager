@@ -14,19 +14,18 @@ class Student:
     self.netID = netID
 
 class color:
-  HEADER = '\033[95m'
+  PURPLE = '\033[95m'
   BLUE = '\033[94m'
   GREEN = '\033[92m'
-  WARNING = '\033[93m'
-  FAIL = '\033[91m'
-  ENDC = '\033[0m'
+  YELLOW = '\033[93m'
+  RED = '\033[91m'
   BOLD = '\033[1m'
   UNDERLINE = '\033[4m'
   RESET = '\033[00m'
 
 def create(student, IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
   if ADMIN_START_IP > int(IP) > END_IP:
-    print(f"{color.FAIL}[ERROR]{color.RESET} Trying to create an IP out of the 192.168.10.50-255 range. Trying to create 192.168.10.{IP}.\nStopping!")
+    print(f"{color.RED}[ERROR]{color.RESET} Trying to create an IP out of the 192.168.10.50-255 range. Trying to create 192.168.10.{IP}.\nStopping!")
     exit()
   next_vm_id = subprocess.run(['pvesh', 'get', '/cluster/nextid'], stdout=subprocess.PIPE).stdout.decode('utf-8')[:-1]
   return_val = os.system(f"""pct create {next_vm_id} \
@@ -38,30 +37,30 @@ def create(student, IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
                 --onboot 1 --start 1
               """)
   if return_val != 0:
-    print(f"{color.FAIL}[ERROR]{color.RESET} There was an issue creating a live server for {student.netID}! Please check the above error code and try again.")
+    print(f"{color.RED}[ERROR]{color.RESET} There was an issue creating a live server for {color.YELLOW + student.netID + color.RESET}! Please check the above error code and try again.")
     exit()
-  print(f"{color.GREEN}[SUCCESS]{color.RESET} Account created for {color.BLUE + student.netID + color.RESET}: ssh webadmin@192.168.10.{IP}!\n")
+  print(f"{color.GREEN}[SUCCESS]{color.RESET} Account created for {color.YELLOW + student.netID + color.RESET}: ssh webadmin@192.168.10.{IP}!\n")
 
 def get_next_IP(START_IP=START_IP, END_IP=END_IP):
-  print("Checking for next available IP address. Please wait...")
+  print(f"{color.BLUE}[WAIT]{color.RESET} Checking for next available IP address. Please wait...")
   for ip in range(START_IP, END_IP):
     cmd = f"ping -c 1 -w 1 192.168.10.{str(ip)}"
     res = subprocess.run(shlex.split(cmd), stdout=subprocess.DEVNULL)
     if res != 0:
-      print(f"{color.WARNING}[INFO]{color.RESET} Confirming 192.168.10.{str(ip)} ... ", end='')
+      print(f"{color.YELLOW}[INFO]{color.RESET} Confirming 192.168.10.{str(ip)} ... ", end='')
       cmd = f"ping -c 1 -w 1 192.168.10.{str(ip + 1)}"
       second_res = subprocess.run(shlex.split(cmd), stdout=subprocess.DEVNULL)
       if second_res != 0:
-        print("CONFIRMED!")
+        print(f"{color.GREEN}CONFIRMED!{color.RESET}")
         return "192.168.10." + str(ip)
-      print(f"{color.FAIL}FAILURE!{color.RESET}\nNext IP occupied.. Trying to find another!")
-  print(f"{color.FAIL}[ERROR]{color.RESET} No empty IP addresses were found in 192.168.10.60-255. Please look into this and try again.")
+      print(f"{color.RED}FAILURE!{color.RESET}\nNext IP occupied.. Trying to find another!")
+  print(f"{color.RED}[ERROR]{color.RESET} No empty IP addresses were found in 192.168.10.60-255. Please look into this and try again.")
   exit()
 
 def create_multiple(FILENAME, START_IP=START_IP):
   student_list = []
   if ".csv" not in FILENAME:
-    print(f"{color.FAIL}[ERROR]{color.RESET} The supplied filename, {FILENAME} does not appear to be a .csv file.")
+    print(f"{color.RED}[ERROR]{color.RESET} The supplied filename, {FILENAME} does not appear to be a .csv file.")
     exit()
   with open(FILENAME) as student_csv:
     reader = csv.reader(student_csv, delimiter=',')
@@ -74,28 +73,27 @@ def create_multiple(FILENAME, START_IP=START_IP):
           temp_student = Student(row[1], row[0], row[2])
         except IndexError as e:
           try:
-            print(f"{color.FAIL}[ERROR]{color.RESET} students.csv was formatted incorrectly. At least one row probably has less than three values. \nThe problem is in the line starting with: {row[0]}:",e)
+            print(f"{color.RED}[ERROR]{color.RESET} students.csv was formatted incorrectly. At least one row probably has less than three values. \nThe problem is in the line starting with: {row[0]}:",e)
           except:
-            print(f"{color.FAIL}[ERROR]{color.RESET} students.csv was formatted incorrectly. At least one row probably has less than three values. Problem:",e)
+            print(f"{color.RED}[ERROR]{color.RESET} students.csv was formatted incorrectly. At least one row probably has less than three values. Problem:",e)
         student_list.append(temp_student)
         line_count += 1
-  
   next_ip = get_next_IP(START_IP, END_IP)
   for student in student_list:
     create(student, next_ip[-2:])
     START_IP += 1
-  
   exit()
 
 
 def create_one(NETID, START_IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
   temp_student = Student(NETID, NETID, NETID)
-  is_admin = input("Is this an admin/TA account? (Y/N): ")
+  is_admin = input(f"{color.PURPLE}[QUESTION]{color.RESET} Is this an admin/TA account? (Y/N): ")
   if is_admin in ["Y","y"]:
     START_IP = ADMIN_START_IP
     END_IP = 59
   next_ip = get_next_IP(START_IP, END_IP)
-  custom_ip = input(f"The next available IP address is: {next_ip} Do you want to use this IP address? (Y/N): ")
+  print(f"{color.YELLOW}[INFO]{color.RESET} The next available IP address is: {color.BLUE + next_ip + color.RESET}")
+  custom_ip = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to use this IP address? (Y/N): ")
   if custom_ip in ["N","n"]:
     next_ip = "192.168.10." + input(f"Enter the last two digits of the IP address: 192.168.10.")
   create(temp_student, next_ip[-2:])
