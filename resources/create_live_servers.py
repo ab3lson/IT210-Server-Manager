@@ -29,7 +29,7 @@ def next_admin_vm_id():
   cmd = "pct list | grep -e ^9 | awk 'END{print $1}'" #gets the last VM ID that starts with a 9 (admin range)
   return subprocess.check_output(cmd, shell=True).decode("utf-8") + 1 #returns last admin VM ID + 1
 
-def create(student, IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP, IS_ADMIN=0):
+def create(student, IP=START_IP, IS_ADMIN=0, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
   if ADMIN_START_IP > int(IP) > END_IP:
     print(f"{color.RED}[ERROR]{color.RESET} Trying to create an IP out of the 192.168.10.50-255 range. Trying to create 192.168.10.{IP}.\nStopping!")
     exit()
