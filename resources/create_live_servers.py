@@ -54,7 +54,7 @@ def create(student, IP=START_IP, IS_ADMIN=0, END_IP=END_IP, ADMIN_START_IP=ADMIN
 
 def check_ip(IP):
   cmd = f"ping -c 1 -w 1 192.168.10.{str(IP)}"
-  return subprocess.run(shlex.split(cmd), stdout=subprocess.DEVNULL)
+  return subprocess.run(shlex.split(cmd), stdout=subprocess.stdout)
 
 def get_next_IP(START_IP=START_IP, END_IP=END_IP):
   print(f"{color.BLUE}[WAIT]{color.RESET} Checking for next available IP address. Please wait...")
@@ -94,7 +94,7 @@ def create_multiple(FILENAME, START_IP=START_IP):
   next_ip = int(get_next_IP(START_IP, END_IP)[-2:])
   for student in student_list:
     create(student, next_ip)
-    print(f"{color.BLUE}[WAIT]{color.RESET} Verifying that the next IP is available. Please wait...", end="")
+    print(f"{color.BLUE}[WAIT]{color.RESET} Verifying that 192.168.10.{str(next_ip)} is available. Please wait...", end="")
     res = 1
     while res:
       next_ip += 1
@@ -102,8 +102,9 @@ def create_multiple(FILENAME, START_IP=START_IP):
         print(f"{color.RED}[FAIL]{color.RESET} All IPs in 192.168.10.0/24 are taken.")
         exit()
       res = check_ip(str(next_ip))
+      print("PING response code", res)
       if res != 0:
-        print(f"{color.RED}[FAIL]{color.RESET} 192.168.10.{str(next_ip)} is taken. Trying next IP..")
+        print(f"{color.RED}[FAIL]{color.RESET}")
   exit()
 
 
