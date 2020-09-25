@@ -27,7 +27,9 @@ class color:
 
 def next_admin_vm_id():
   cmd = "pct list | grep -e ^9 | awk 'END{print $1}'" #gets the last VM ID that starts with a 9 (admin range)
-  return int(subprocess.check_output(cmd, shell=True).decode("utf-8")) + 1 #returns last admin VM ID + 1
+  output = subprocess.check_output(cmd, shell=True).decode("utf-8")) + 1 #returns last admin VM ID + 1
+  if '9' not in output: return 900
+  else: return int(output)
 
 def create(student, IP=START_IP, IS_ADMIN=0, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
   if ADMIN_START_IP > int(IP) > END_IP:
