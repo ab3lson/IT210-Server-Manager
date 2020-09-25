@@ -69,6 +69,9 @@ def move(NETID):
   time.sleep(3)
   if res != 0:
       print(f"{color.RED}[FAIL]{color.RESET}\n The container could not be cloned.")
+      print(f"{color.YELLOW}[INFO]{color.RESET} Restarting old container...")
+      cmd = f"pct start {new_vm_id}"
+      res = subprocess.call(shlex.split(cmd), stdout=subprocess.PIPE)
       exit()
   else: print(f"{color.GREEN}[SUCCESS]{color.RESET}")
   print(f"{color.YELLOW}[INFO]{color.RESET} Deleting VM ID {color.YELLOW + str(container_id) + color.RESET} ... ", end='')
