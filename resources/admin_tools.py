@@ -25,14 +25,14 @@ def get_vmid(NETID):
     if container[1] == NETID:
       return container[0]
   if not container_id:
-    print(f"The netID {NETID} could not be found. Please make sure that it exists and try again.")
+    print(f"{color.RED}[ERROR]{color.RESET} {color.YELLOW + NETID + color.RESET} could not be found. Please make sure that it exists and try again.")
     exit()
 
 def list(NETID):
   if NETID != "all_students":
     #match student netID to container ID
     container_id = get_vmid(NETID)
-    print(f"NetID\tVM ID\n-----\t----\n{NETID}\t{container_id}")
+    print(f"NetID\t\tVM ID\n-----\t----\n{NETID}\t{container_id}")
   else:
     cmd = "pct list | tail -n +2 | awk '{sub(/-210/,\"\"); print $1 \"    \"$3}'"
     print(f"NetID\tVM ID\n-----\t----")

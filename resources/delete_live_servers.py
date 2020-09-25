@@ -23,19 +23,20 @@ class color:
   UNDERLINE = '\033[4m'
   RESET = '\033[00m'
 
+
 def get_vmid(NETID):
-  #match student netID to container ID
-  cmd = "pct list | tail -n+2 | awk '{print $1 \",\"$3}'"
+  cmd = "pct list | tail -n +2 | awk '{sub(/-210/,\"\"); print $1 \",\"$3}'"
   vm_ids = subprocess.check_output(cmd, shell=True).decode("utf-8") 
   container_info = [row for row in csv.reader(vm_ids.splitlines(), delimiter=',')]
   container_id = False
   for container in container_info:
-    if container[1][:-6] == NETID:    #strips "Server" away from the container's hostname to see if it matches
-      container_id = container[0]
+    print("container:",container)
+    if container[1] == NETID:
+      return container[0]
   if not container_id:
-    print(f"{color.RED}[ERROR]{color.RESET} The netID {color.YELLOW + NETID + color.RESET} could not be found. Please make sure that it exists and try again.")
+    print(f"{color.RED}[ERROR]{color.RESET} {color.YELLOW + NETID + color.RESET} could not be found. Please make sure that it exists and try again.")
     exit()
-  return container_id
+
 
 def lxc_destory(container_id):
   cmd = f"lxc-destroy -f {container_id}"
