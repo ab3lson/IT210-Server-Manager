@@ -61,21 +61,19 @@ def move(NETID):
   if res != 0:
     print(f"{color.RED}[FAIL]{color.RESET}\n The container could not be stopped.")
   else: print(f"{color.GREEN}[SUCCESS]{color.RESET}")
-  time.sleep(3)
   print(f"{color.YELLOW}[INFO]{color.RESET} Cloning VM ID {color.YELLOW + str(container_id) + color.RESET} to {color.YELLOW + str(new_vm_id) + color.RESET} ... ", end='')
   cmd = f"pct clone {container_id} {new_vm_id}"
   res = subprocess.call(shlex.split(cmd), stdout=subprocess.PIPE)
   if res != 0:
       print(f"{color.RED}[FAIL]{color.RESET}\n The container could not be cloned.")
   else: print(f"{color.GREEN}[SUCCESS]{color.RESET}")
-  time.sleep(3)
   print(f"{color.YELLOW}[INFO]{color.RESET} Deleting VM ID {color.YELLOW + str(container_id) + color.RESET} ... ", end='')
   cmd = f"pct destroy {container_id}"
   res = subprocess.call(shlex.split(cmd), stdout=subprocess.PIPE)
   if res != 0:
       print(f"{color.RED}[FAIL]{color.RESET}\n The container could not be deleted.")
   else: print(f"{color.GREEN}[SUCCESS]{color.RESET}")
-  time.sleep(3)
+  print(f"{color.YELLOW}[INFO]{color.RESET} Starting new VM ID {color.YELLOW + str(container_id) + color.RESET} ... ", end='')
   cmd = f"pct start {new_vm_id}"
   res = subprocess.call(shlex.split(cmd), stdout=subprocess.PIPE)
   if res != 0:
