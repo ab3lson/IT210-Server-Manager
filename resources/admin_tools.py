@@ -16,13 +16,13 @@ class Student:
 
 
 def get_vmid(NETID):
-  cmd = "pct list | tail -n +2 | awk '{sub(/-210/,\"\"); print $1 \"    \"$3}'"
+  cmd = "pct list | tail -n +2 | awk '{sub(/-210/,\"\"); print $1 \",\"$3}'"
   vm_ids = subprocess.check_output(cmd, shell=True).decode("utf-8") 
   container_info = [row for row in csv.reader(vm_ids.splitlines(), delimiter=',')]
   container_id = False
   for container in container_info:
     print("container:",container)
-    if container[1][:-4] == NETID:    #strips "-210" away from the container's hostname to see if it matches
+    if container[1] == NETID:
       return container[0]
   if not container_id:
     print(f"The netID {NETID} could not be found. Please make sure that it exists and try again.")
