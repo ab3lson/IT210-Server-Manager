@@ -65,7 +65,7 @@ def get_next_IP(START_IP=START_IP, END_IP=END_IP):
       second_res = check_ip(str(ip + 1))
       if second_res != 0:
         print(f"{color.GREEN}CONFIRMED!{color.RESET}")
-        return "192.168.10." + str(ip)
+        return ip
       print(f"{color.RED}FAILURE!{color.RESET}\nNext IP occupied.. Trying to find another!")
   print(f"{color.RED}[ERROR]{color.RESET} No empty IP addresses were found in 192.168.10.60-255. Please look into this and try again.")
   exit()
@@ -91,19 +91,21 @@ def create_multiple(FILENAME, START_IP=START_IP):
             print(f"{color.RED}[ERROR]{color.RESET} students.csv was formatted incorrectly. At least one row probably has less than three values. Problem:",e)
         student_list.append(temp_student)
         line_count += 1
-  next_ip = int(get_next_IP(START_IP, END_IP)[-2:])
+  next_ip = int(get_next_IP(START_IP, END_IP))
   for student in student_list:
     create(student, next_ip)
     res = 0
     while not res:  #if ping returns 0, then the IP address is taken
       next_ip += 1
-      print(f"{color.BLUE}[WAIT]{color.RESET} Verifying that 192.168.10.{str(next_ip)} is available. Please wait...", end="")
+      print(f"{color.BLUE}[WAIT]{color.RESET} Verifying that 192.168.10.{str(next_ip)} is available. Please wait ... ", end="")
       if next_ip > 255:
-        print(f"{color.RED}[FAIL]{color.RESET} All IPs in 192.168.10.0/24 are taken.")
+        print(f"{color.RED}[FAIL]{color.RESET}\nAll IPs in 192.168.10.0/24 are taken.")
         exit()
       res = check_ip(str(next_ip))
       if res == 0:
         print(f"{color.RED}[FAIL]{color.RESET}")
+    print(f"{color.GREEN}[SUCCESS]{color.RESET}")
+
   exit()
 
 
@@ -116,11 +118,11 @@ def create_one(NETID, START_IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_STA
     END_IP = 59
     IS_ADMIN = 1
   next_ip = get_next_IP(START_IP, END_IP)
-  print(f"{color.YELLOW}[INFO]{color.RESET} The next available IP address is: {color.BLUE + next_ip + color.RESET}")
+  print(f"{color.YELLOW}[INFO]{color.RESET} The next available IP address is: {color.BLUE}192.168.10.{next_ip + color.RESET}")
   custom_ip = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to use this IP address? (Y/N): ")
   if custom_ip in ["N","n"]:
-    next_ip = "192.168.10." + input(f"Enter the last two digits of the IP address: 192.168.10.")
-  create(temp_student, next_ip[-2:], IS_ADMIN)
+    next_ip = input(f"Enter the last two digits of the IP address: 192.168.10.")
+  create(temp_student, next_ip, IS_ADMIN)
   exit()
 
 if __name__ == "__main__":
