@@ -89,10 +89,10 @@ def create_multiple(FILENAME, START_IP=START_IP):
             print(f"{color.RED}[ERROR]{color.RESET} students.csv was formatted incorrectly. At least one row probably has less than three values. Problem:",e)
         student_list.append(temp_student)
         line_count += 1
-  next_ip = get_next_IP(START_IP, END_IP)
+  next_ip = get_next_IP(START_IP, END_IP)[-2:]
   for student in student_list:
-    create(student, next_ip[-2:])
-    START_IP += 1
+    create(student, next_ip)
+    next_ip += 1
   exit()
 
 

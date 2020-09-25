@@ -91,14 +91,14 @@ def delete_multiple():
     exit()
   to_delete = RANGE_START
   for student in range(RANGE_START, RANGE_END):
-    delete(to_delete, "VM ID:" + str(to_delete))
+    delete(to_delete, "VM ID: " + str(to_delete))
     to_delete += 1
-  print(f"\n{color.BLUE}[COMPLETE]{color.RESET} All servers between {color.BLUE + RANGE_START+ color.RESET} and {color.BLUE + RANGE_END + color.RESET} were deleted!")
+  print(f"\n{color.BLUE}[COMPLETE]{color.RESET} All servers between {color.BLUE + str(RANGE_START) + color.RESET} and {color.BLUE + str(RANGE_END) + color.RESET} were deleted!")
 
 def delete_one(NETID):
   #match student netID to container ID
   container_id = get_vmid(NETID)
-  confirm = input(f"Are you sure that you want to delete the account for {color.YELLOW + NETID + color.RESET} (VM ID: {color.YELLOW + container_id + color.RESET})? (Y/N): ")
+  confirm = input(f"Are you sure that you want to delete the account for {color.YELLOW + NETID + color.RESET} (VM ID: {color.YELLOW + str(container_id) + color.RESET})? (Y/N): ")
   if confirm in ['Y', 'y']:
     delete(container_id, NETID)
   else:
@@ -109,6 +109,6 @@ if __name__ == "__main__":
   RANGE_END = input("What VM ID do you want to end at?: ")
   to_delete = RANGE_START
   for student in range(RANGE_START, RANGE_END):
-    delete(to_delete, "VM ID:" + str(to_delete))
+    delete(to_delete, "VM ID: " + str(to_delete))
     to_delete += 1
-  print(f"\n{color.BLUE}[COMPLETE]{color.RESET} All servers between {color.BLUE + RANGE_START+ color.RESET} and {color.BLUE + RANGE_END + color.RESET} were deleted!")
+  print(f"\n{color.BLUE}[COMPLETE]{color.RESET} All servers between {color.BLUE + str(RANGE_START) + color.RESET} and {color.BLUE + str(RANGE_END) + color.RESET} were deleted!")
