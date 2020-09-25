@@ -5,6 +5,7 @@ import shlex
 import time
 
 ADMIN_START_IP=50
+ADMIN_START_VM_ID = 900
 START_IP = 60     #This is the start of the last octet that will be used for students in 192.168.10.0/24
 END_IP = 255
 class Student:
@@ -23,11 +24,19 @@ class color:
   UNDERLINE = '\033[4m'
   RESET = '\033[00m'
 
-def create(student, IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
+
+def next_admin_vm_id():
+  cmd = "pct list | grep -e ^9 | awk 'END{print $1}'" #gets the last VM ID that starts with a 9 (admin range)
+  return subprocess.check_output(cmd, shell=True).decode("utf-8") + 1 #returns last admin VM ID + 1
+  
+def create(student, IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP, IS_ADMIN=0):
   if ADMIN_START_IP > int(IP) > END_IP:
     print(f"{color.RED}[ERROR]{color.RESET} Trying to create an IP out of the 192.168.10.50-255 range. Trying to create 192.168.10.{IP}.\nStopping!")
     exit()
-  next_vm_id = subprocess.run(['pvesh', 'get', '/cluster/nextid'], stdout=subprocess.PIPE).stdout.decode('utf-8')[:-1]
+  if IS_ADMIN:
+    next_vm_id = next_admin_vm_id()
+  else:
+    next_vm_id = subprocess.run(['pvesh', 'get', '/cluster/nextid'], stdout=subprocess.PIPE).stdout.decode('utf-8')[:-1]
   return_val = os.system(f"""pct create {next_vm_id} \
                 /var/lib/vz/template/cache/ubuntu-20.04-210-student-template.tar.gz \
                 --cores 2 --cpuunits 2048 --memory 4096 --swap 512 \
@@ -87,16 +96,18 @@ def create_multiple(FILENAME, START_IP=START_IP):
 
 def create_one(NETID, START_IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
   temp_student = Student(NETID, NETID, NETID)
+  IS_ADMIN = 0
   is_admin = input(f"{color.PURPLE}[QUESTION]{color.RESET} Is this an admin/TA account? (Y/N): ")
   if is_admin in ["Y","y"]:
     START_IP = ADMIN_START_IP
     END_IP = 59
+    IS_ADMIN = 1
   next_ip = get_next_IP(START_IP, END_IP)
   print(f"{color.YELLOW}[INFO]{color.RESET} The next available IP address is: {color.BLUE + next_ip + color.RESET}")
   custom_ip = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to use this IP address? (Y/N): ")
   if custom_ip in ["N","n"]:
     next_ip = "192.168.10." + input(f"Enter the last two digits of the IP address: 192.168.10.")
-  create(temp_student, next_ip[-2:])
+  create(temp_student, next_ip[-2:], IS_ADMIN)
   exit()
 
 if __name__ == "__main__":

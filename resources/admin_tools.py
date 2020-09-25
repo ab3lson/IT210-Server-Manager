@@ -43,7 +43,7 @@ def list(NETID):
     print(f"NetID\t\tVM ID\n-----\t----\n{NETID}\t{container_id}")
   else:
     cmd = "pct list | tail -n +2 | awk '{sub(/-210/,\"\"); print $1 \"    \"$3}'"
-    print(f"NetID\tVM ID\n-----\t----")
+    print(f"VM ID\tNetID\n-----\t----")
     print(subprocess.check_output(cmd, shell=True).decode("utf-8"))
 
 def enter(NETID):
