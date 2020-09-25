@@ -49,7 +49,7 @@ def get_next_IP(START_IP=START_IP, END_IP=END_IP):
     cmd = f"ping -c 1 -w 1 192.168.10.{str(ip)}"
     res = subprocess.run(shlex.split(cmd), stdout=subprocess.DEVNULL)
     if res != 0:
-      print(f"Confirming 192.168.10.{str(ip)} ... ", end='')
+      print(f"{color.WARNING}[INFO]{color.RESET} Confirming 192.168.10.{str(ip)} ... ", end='')
       cmd = f"ping -c 1 -w 1 192.168.10.{str(ip + 1)}"
       second_res = subprocess.run(shlex.split(cmd), stdout=subprocess.DEVNULL)
       if second_res != 0:
