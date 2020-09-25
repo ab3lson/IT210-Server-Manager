@@ -15,19 +15,20 @@ class Student:
     self.netID = netID
 
 def list(NETID):
-  cmd = "pct list | awk '{sub(/Server/,\"\"); print $1 \"    \"$3}'"
+  cmd = "pct list | awk '{sub(/-210/,\"\"); print $1 \"    \"$3}'"
   if NETID != "all_students":
     #match student netID to container ID
     vm_ids = subprocess.check_output(cmd, shell=True).decode("utf-8") 
     container_info = [row for row in csv.reader(vm_ids.splitlines(), delimiter=',')]
     container_id = False
     for container in container_info:
-      if container[1][:-6] == NETID:    #strips "Server" away from the container's hostname to see if it matches
+      if container[1][:-4] == NETID:    #strips "-210" away from the container's hostname to see if it matches
         container_id = container[0]
     if not container_id:
       print(f"The netID {NETID} could not be found. Please make sure that it exists and try again.")
       exit()
     print(f"NetID\tVM ID\n-----\t----\n{NETID}\t{container_id}")
   else:
+    print(f"NetID\tVM ID\n-----\t----")
     print(subprocess.check_output(cmd, shell=True).decode("utf-8"))
     
