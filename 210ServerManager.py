@@ -41,8 +41,6 @@ if __name__ == "__main__":
     main_menu()
 
   if args.create:
-    print("-c was selected")
-    print("The filepath is:", args.create[0])
     create_live_servers.create_multiple(args.create[0])
   elif args.create_one:
     create_live_servers.create_one(args.create_one[0])

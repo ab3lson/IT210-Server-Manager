@@ -40,8 +40,8 @@ def create(student, IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
   if return_val != 0:
     print(f"{color.FAIL}[ERROR]{color.RESET} There was an issue creating a live server for {student.netID}! Please check the above error code and try again.")
     exit()
-  print(f"{color.GREEN}[SUCCESS]{color.RESET} Account created for {color.BLUE + student.netID + color.RESET}: ssh webadmin@192.168.10.{IP}!\n")
-
+  cursor_move = "\033[F" * 27
+  print(f"{cusor_move + color.GREEN}[SUCCESS]{color.RESET} Account created for {color.BLUE + student.netID + color.RESET}: ssh webadmin@192.168.10.{IP}!\n")
 
 def get_next_IP(START_IP=START_IP, END_IP=END_IP):
   print("Checking for next available IP address. Please wait...")
@@ -80,8 +80,6 @@ def create_multiple(FILENAME, START_IP=START_IP):
             print(f"{color.FAIL}[ERROR]{color.RESET} students.csv was formatted incorrectly. At least one row probably has less than three values. Problem:",e)
         student_list.append(temp_student)
         line_count += 1
-  for student in student_list:
-    print("First Name:", student.first_name, "\tLast Name:", student.last_name, "\tNetID:", student.netID)
   
   next_ip = get_next_IP(START_IP, END_IP)
   for student in student_list:
