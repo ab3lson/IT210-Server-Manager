@@ -36,7 +36,7 @@ def create(student, IP=START_IP, IS_ADMIN=0, END_IP=END_IP, ADMIN_START_IP=ADMIN
   if IS_ADMIN:
     print(f"{color.YELLOW}[INFO]{color.RESET} Getting next admin VM ID ... ", end="")
     next_vm_id = next_admin_vm_id()
-    print(color.YELLOW + next_vm_id + color.RESET)
+    print(color.YELLOW + str(next_vm_id) + color.RESET)
   else:
     next_vm_id = subprocess.run(['pvesh', 'get', '/cluster/nextid'], stdout=subprocess.PIPE).stdout.decode('utf-8')[:-1]
   return_val = os.system(f"""pct create {next_vm_id} \
