@@ -54,7 +54,7 @@ def create(student, IP=START_IP, IS_ADMIN=0, END_IP=END_IP, ADMIN_START_IP=ADMIN
 
 def check_ip(IP):
   cmd = f"ping -c 1 -w 1 192.168.10.{str(IP)}"
-  return subprocess.run(shlex.split(cmd), stdout=subprocess.stdout)
+  return subprocess.run(shlex.split(cmd), stdout=subprocess.PIPE)
 
 def get_next_IP(START_IP=START_IP, END_IP=END_IP):
   print(f"{color.BLUE}[WAIT]{color.RESET} Checking for next available IP address. Please wait...")
