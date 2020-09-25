@@ -53,9 +53,9 @@ def enter(NETID):
   subprocess.run(shlex.split(cmd))
 
 def move(NETID):
-  new_vm_id = input(f"{color.PURPLE}[QUESTION]{color.RESET} What do you want their new VM ID to be?:")
+  new_vm_id = input(f"{color.PURPLE}[QUESTION]{color.RESET} What do you want their new VM ID to be? (Admin/TA range starts at 900):")
   container_id = get_vmid(NETID)
-  print(f"{color.YELLOW}[INFO]{color.RESET} Stopping {color.YELLOW + NETID + color.RESET}\'s live server (VM ID: {vm_id}) ... ", end='')
+  print(f"{color.YELLOW}[INFO]{color.RESET} Stopping {color.YELLOW + NETID + color.RESET}\'s live server (VM ID: {container_id}) ... ", end='')
   cmd = f"pct stop {container_id}"
   res = subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
   if res != 0:
