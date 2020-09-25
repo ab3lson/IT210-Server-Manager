@@ -13,9 +13,20 @@ class Student:
     self.last_name = last_name
     self.netID = netID
 
+class color:
+  HEADER = '\033[95m'
+  BLUE = '\033[94m'
+  GREEN = '\033[92m'
+  WARNING = '\033[93m'
+  FAIL = '\033[91m'
+  ENDC = '\033[0m'
+  BOLD = '\033[1m'
+  UNDERLINE = '\033[4m'
+  RESET = '\033[00m'
+
 def create(student, IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
   if ADMIN_START_IP > int(IP) > END_IP:
-    print(f"ERROR: Trying to create an IP out of the 192.168.10.50-255 range. Trying to create 192.168.10.{IP}.\nStopping!")
+    print(f"{color.FAIL}[ERROR]{color.RESET} Trying to create an IP out of the 192.168.10.50-255 range. Trying to create 192.168.10.{IP}.\nStopping!")
     exit()
   next_vm_id = subprocess.run(['pvesh', 'get', '/cluster/nextid'], stdout=subprocess.PIPE).stdout.decode('utf-8')[:-1]
   return_val = os.system(f"""pct create {next_vm_id} \
@@ -27,9 +38,9 @@ def create(student, IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
                 --onboot 1 --start 1
               """)
   if return_val != 0:
-    print(f"ERROR: There was an issue creating a live server for {student.netID}! Please check the above error code and try again.")
+    print(f"{color.FAIL}[ERROR]{color.RESET} There was an issue creating a live server for {student.netID}! Please check the above error code and try again.")
     exit()
-  print(f"Account created for {student.netID}: ssh webadmin@192.168.10.{IP}!")
+  print(f"{color.GREEN}[SUCCESS]{color.RESET} Account created for {student.netID}: ssh webadmin@192.168.10.{IP}!")
 
 
 def get_next_IP(START_IP=START_IP, END_IP=END_IP):
@@ -44,14 +55,14 @@ def get_next_IP(START_IP=START_IP, END_IP=END_IP):
       if second_res != 0:
         print("CONFIRMED!")
         return "192.168.10." + str(ip)
-      print("FAILURE!\nNext IP occupied.. Trying to find another!")
-  print("ERROR: No empty IP addresses were found in 192.168.10.60-255. Please look into this and try again.")
+      print(f"{color.FAIL}FAILURE!{color.RESET}\nNext IP occupied.. Trying to find another!")
+  print(f"{color.FAIL}[ERROR]{color.RESET} No empty IP addresses were found in 192.168.10.60-255. Please look into this and try again.")
   exit()
 
 def create_multiple(FILENAME, START_IP=START_IP):
   student_list = []
   if ".csv" not in FILENAME:
-    print(f"ERROR: The supplied filename, {FILENAME} does not appear to be a .csv file.")
+    print(f"{color.FAIL}[ERROR]{color.RESET} The supplied filename, {FILENAME} does not appear to be a .csv file.")
     exit()
   with open(FILENAME) as student_csv:
     reader = csv.reader(student_csv, delimiter=',')
@@ -64,9 +75,9 @@ def create_multiple(FILENAME, START_IP=START_IP):
           temp_student = Student(row[1], row[0], row[2])
         except IndexError as e:
           try:
-            print(f"ERROR: students.csv was formatted incorrectly. At least one row probably has less than three values. \nThe problem is in the line starting with: {row[0]}:",e)
+            print(f"{color.FAIL}[ERROR]{color.RESET} students.csv was formatted incorrectly. At least one row probably has less than three values. \nThe problem is in the line starting with: {row[0]}:",e)
           except:
-            print("ERROR: students.csv was formatted incorrectly. At least one row probably has less than three values. Problem:",e)
+            print(f"{color.FAIL}[ERROR]{color.RESET} students.csv was formatted incorrectly. At least one row probably has less than three values. Problem:",e)
         student_list.append(temp_student)
         line_count += 1
   for student in student_list:
