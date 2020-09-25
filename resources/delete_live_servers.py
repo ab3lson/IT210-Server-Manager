@@ -30,7 +30,6 @@ def get_vmid(NETID):
   container_info = [row for row in csv.reader(vm_ids.splitlines(), delimiter=',')]
   container_id = False
   for container in container_info:
-    print("container:",container)
     if container[1] == NETID:
       return container[0]
   if not container_id:

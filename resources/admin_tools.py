@@ -13,7 +13,16 @@ class Student:
     self.first_name = first_name
     self.last_name = last_name
     self.netID = netID
-
+    
+ class color:
+  PURPLE = '\033[95m'
+  BLUE = '\033[94m'
+  GREEN = '\033[92m'
+  YELLOW = '\033[93m'
+  RED = '\033[91m'
+  BOLD = '\033[1m'
+  UNDERLINE = '\033[4m'
+  RESET = '\033[00m'
 
 def get_vmid(NETID):
   cmd = "pct list | tail -n +2 | awk '{sub(/-210/,\"\"); print $1 \",\"$3}'"
@@ -21,7 +30,6 @@ def get_vmid(NETID):
   container_info = [row for row in csv.reader(vm_ids.splitlines(), delimiter=',')]
   container_id = False
   for container in container_info:
-    print("container:",container)
     if container[1] == NETID:
       return container[0]
   if not container_id:
