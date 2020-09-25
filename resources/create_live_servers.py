@@ -53,7 +53,7 @@ def create(student, IP=START_IP, IS_ADMIN=0, END_IP=END_IP, ADMIN_START_IP=ADMIN
   print(f"{color.GREEN}[SUCCESS]{color.RESET} Account created for {color.YELLOW + student.netID + color.RESET}: ssh webadmin@192.168.10.{IP}!\n")
 
 def check_ip(IP):
-  cmd = f"ping -c 1 -w 1 192.168.10.{str(ip)}"
+  cmd = f"ping -c 1 -w 1 192.168.10.{str(IP)}"
   return subprocess.run(shlex.split(cmd), stdout=subprocess.DEVNULL)
 
 def get_next_IP(START_IP=START_IP, END_IP=END_IP):
