@@ -13,8 +13,8 @@ class Student:
     self.first_name = first_name
     self.last_name = last_name
     self.netID = netID
-    
- class color:
+
+class color:
   PURPLE = '\033[95m'
   BLUE = '\033[94m'
   GREEN = '\033[92m'
