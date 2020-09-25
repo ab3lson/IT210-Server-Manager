@@ -53,7 +53,7 @@ def create(student, IP=START_IP, IS_ADMIN=0, END_IP=END_IP, ADMIN_START_IP=ADMIN
   print(f"{color.GREEN}[SUCCESS]{color.RESET} Account created for {color.YELLOW + student.netID + color.RESET}: ssh webadmin@192.168.10.{IP}!\n")
 
 def check_ip(IP):
-  cmd = f"ping -c 1 -w 1 192.168.10.{str(IP)}"
+  cmd = f"ping -c 1 -w 3 192.168.10.{str(IP)}"
   return subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 def get_next_IP(START_IP=START_IP, END_IP=END_IP):
@@ -94,17 +94,18 @@ def create_multiple(FILENAME, START_IP=START_IP):
   next_ip = int(get_next_IP(START_IP, END_IP)[-2:])
   for student in student_list:
     create(student, next_ip)
-    print(f"{color.BLUE}[WAIT]{color.RESET} Verifying that 192.168.10.{str(next_ip)} is available. Please wait...", end="")
     res = 1
     while res:
       next_ip += 1
+      print(f"{color.BLUE}[WAIT]{color.RESET} Verifying that 192.168.10.{str(next_ip)} is available. Please wait...", end="")
       if next_ip > 255:
         print(f"{color.RED}[FAIL]{color.RESET} All IPs in 192.168.10.0/24 are taken.")
         exit()
       res = check_ip(str(next_ip))
-      print("PING response code", res)
       if res != 0:
         print(f"{color.RED}[FAIL]{color.RESET}")
+      print("PING response code", res)
+
   exit()
 
 
