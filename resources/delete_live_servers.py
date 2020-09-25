@@ -33,7 +33,7 @@ def get_vmid(NETID):
     if container[1] == NETID:
       return container[0]
   if not container_id:
-    print(f"{color.RED}[ERROR]{color.RESET} {color.YELLOW + NETID + color.RESET} could not be found. Please make sure that it exists and try again.")
+    print(f"{color.RED}[ERROR]{color.RESET} The NetID {color.YELLOW + NETID + color.RESET} could not be found. Please make sure that it exists and try again.")
     exit()
 
 
