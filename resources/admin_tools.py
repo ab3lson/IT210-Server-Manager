@@ -51,3 +51,36 @@ def enter(NETID):
   print(f"{color.YELLOW}[INFO]{color.RESET} Entering {color.YELLOW + NETID + color.RESET} (VM ID: {vm_id})... Press {color.PURPLE}ctrl + d{color.RESET} to exit!")
   cmd = f"pct enter {vm_id}"
   subprocess.run(shlex.split(cmd))
+
+def move(NETID):
+  new_vm_id = input(f"{color.PURPLE}[QUESTION]{color.RESET} What do you want their new VM ID to be?:")
+  container_id = get_vmid(NETID)
+  print(f"{color.YELLOW}[INFO]{color.RESET} Stopping {color.YELLOW + NETID + color.RESET}\'s live server (VM ID: {vm_id}) ... ", end='')
+  cmd = f"pct stop {container_id}"
+  res = subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+  if res != 0:
+    print(f"{color.RED}[FAIL]{color.RESET}\n The container could not be stopped.")
+  else: print(f"{color.GREEN}[SUCCESS]{color.RESET}")
+  time.sleep(3)
+  print(f"{color.YELLOW}[INFO]{color.RESET} Cloning VM ID {color.YELLOW + str(container_id) + color.RESET} to {color.YELLOW + str(new_vm_id) + color.RESET} ... ", end='')
+  cmd = f"pct clone {container_id} {new_vm_id}"
+  res = subprocess.call(shlex.split(cmd), stdout=subprocess.PIPE)
+  if res != 0:
+      print(f"{color.RED}[FAIL]{color.RESET}\n The container could not be cloned.")
+  else: print(f"{color.GREEN}[SUCCESS]{color.RESET}")
+  time.sleep(3)
+  print(f"{color.YELLOW}[INFO]{color.RESET} Deleting VM ID {color.YELLOW + str(container_id) + color.RESET} ... ", end='')
+  cmd = f"pct destroy {container_id}"
+  res = subprocess.call(shlex.split(cmd), stdout=subprocess.PIPE)
+  if res != 0:
+      print(f"{color.RED}[FAIL]{color.RESET}\n The container could not be deleted.")
+  else: print(f"{color.GREEN}[SUCCESS]{color.RESET}")
+  time.sleep(3)
+  cmd = f"pct start {new_vm_id}"
+  res = subprocess.call(shlex.split(cmd), stdout=subprocess.PIPE)
+  if res != 0:
+      print(f"{color.RED}[FAIL]{color.RESET}\n The new container could not be started.")
+  else: print(f"{color.GREEN}[SUCCESS]{color.RESET}")
+  time.sleep(3)
+
+

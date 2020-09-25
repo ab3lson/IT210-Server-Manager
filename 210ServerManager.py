@@ -52,8 +52,6 @@ if __name__ == "__main__":
   elif args.move:
     admin_tools.list(args.move[0])
   elif args.enter:
-    print("-e was selected")
-    print("The NetID is:", args.enter[0])
     admin_tools.enter(args.enter[0])
   elif args.list == [] or args.list:  #no argument is required
     admin_tools.list(args.list)  #passes NetID if provided

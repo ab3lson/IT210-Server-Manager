@@ -54,7 +54,7 @@ def delete(container_id, NETID):
     print(f"{color.RED}[ERROR]{color.RESET} The container ID must be at least 100. Please try again.")
     exit()
   print(f"Starting deletion for {color.YELLOW + NETID + color.RESET}...")
-  res = lxc_destory(container_id)
+  res = lxc_destory(container_id) #TODO Speed up: Try looping this command through the entire range and let them shut down together, then run pct destroy
   if res != 0 and res !=1:      #if there is an error
     print(f"{color.RED}[ERROR]{color.RESET} The server for {color.YELLOW + NETID + color.RESET} could not be deleted. Response code to lxc-destroy -f was {res} ")
     exit()
