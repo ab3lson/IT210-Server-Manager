@@ -94,18 +94,16 @@ def create_multiple(FILENAME, START_IP=START_IP):
   next_ip = int(get_next_IP(START_IP, END_IP)[-2:])
   for student in student_list:
     create(student, next_ip)
-    res = 1
-    while res:
+    res = 0
+    while not res:  #if ping returns 0, then the IP address is taken
       next_ip += 1
       print(f"{color.BLUE}[WAIT]{color.RESET} Verifying that 192.168.10.{str(next_ip)} is available. Please wait...", end="")
       if next_ip > 255:
         print(f"{color.RED}[FAIL]{color.RESET} All IPs in 192.168.10.0/24 are taken.")
         exit()
       res = check_ip(str(next_ip))
-      if res != 0:
+      if res == 0:
         print(f"{color.RED}[FAIL]{color.RESET}")
-      print("PING response code", res)
-
   exit()
 
 
