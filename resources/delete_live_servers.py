@@ -76,8 +76,7 @@ def delete(container_id, NETID):
   else:          #if lxc-destroy worked and the container shut down, now it can be deleted from ProxMox
     print(f"{color.BLUE}[WAIT]{color.RESET} Shutting down container...")
     time.sleep(10)
-    cmd = f"pct destroy {container_id}"
-    res = subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    res = pct_destroy(container_id)
     if res != 0:
       print(f"""The server for {NETID} could not be deleted. The container may have been stopping, but didn't finish.
       Try again in a couple seconds or check the web GUI to see if it is still active.""")
@@ -85,8 +84,8 @@ def delete(container_id, NETID):
     print(f"\033[F\033[F{color.GREEN}[SUCCESS]{color.RESET} Server deleted for {NETID}!")
 
 def delete_multiple():
-  RANGE_START = int(input("What VM ID do you want to start at?:"))
-  RANGE_END = int(input("What VM ID do you want to end at?:")) + 1
+  RANGE_START = int(input("What VM ID do you want to start at?: "))
+  RANGE_END = int(input("What VM ID do you want to end at?: ")) + 1
   confirm = input(f"Are you sure that you want to delete all servers between {RANGE_START} and {RANGE_END - 1}? (Y/N): ")
   if not confirm in ['Y', 'y']:
     print("Whew! Exiting...")
@@ -95,7 +94,7 @@ def delete_multiple():
   for student in range(RANGE_START, RANGE_END):
     delete(to_delete, "VM ID:" + str(to_delete))
     to_delete += 1
-  print(f"All servers between {RANGE_START} and {RANGE_END} were deleted!")
+  print(f"\n{color.BLUE}[COMPLETE]{color.RESET} All servers between {RANGE_START} and {RANGE_END} were deleted!")
 
 def delete_one(NETID):
   #match student netID to container ID
@@ -106,7 +105,6 @@ def delete_one(NETID):
   else:
     exit()
 
-
 if __name__ == "__main__":
-  START_IP = input("What VM ID do you want to start at?:")
-  END_IP = input("What VM ID do you want to end at?:")
+  START_IP = input("What VM ID do you want to start at?: ")
+  END_IP = input("What VM ID do you want to end at?: ")

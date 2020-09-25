@@ -40,7 +40,7 @@ def create(student, IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
   if return_val != 0:
     print(f"{color.FAIL}[ERROR]{color.RESET} There was an issue creating a live server for {student.netID}! Please check the above error code and try again.")
     exit()
-  print(f"{color.GREEN}[SUCCESS]{color.RESET} Account created for {student.netID}: ssh webadmin@192.168.10.{IP}!")
+  print(f"{color.GREEN}[SUCCESS]{color.RESET} Account created for {color.BLUE + student.netID + color.RESET}: ssh webadmin@192.168.10.{IP}!\n")
 
 
 def get_next_IP(START_IP=START_IP, END_IP=END_IP):
@@ -87,6 +87,7 @@ def create_multiple(FILENAME, START_IP=START_IP):
   for student in student_list:
     create(student, next_ip[-2:])
     START_IP += 1
+  
   exit()
 
 
