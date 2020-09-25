@@ -50,7 +50,7 @@ if __name__ == "__main__":
   elif args.delete_one:
     delete_live_servers.delete_one(args.delete_one[0])
   elif args.move:
-    admin_tools.list(args.move[0])
+    admin_tools.move(args.move[0])
   elif args.enter:
     admin_tools.enter(args.enter[0])
   elif args.list == [] or args.list:  #no argument is required
