@@ -130,8 +130,8 @@ def create_one(NETID, START_IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_STA
 def menu():
   user_choice = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to create more than one server? (Y/N): ")
   if user_choice in ["Y", "y"]:
-    print(f"{color.BLUE}[INFO]{color.RESET} You can import a .csv file of students to create live servers for. It should be in the following format: {color.YELLOW}LAST_NAME,FIRSTNAME,NETID{color.RESET}")
-    FILENAME = input("What is the path of the student list .csv file?")
+    print(f"{color.BLUE}[INFO]{color.RESET} You can import a .csv file of students to create live servers for.\nIt should be in the following format: {color.YELLOW}LAST_NAME,FIRSTNAME,NETID{color.RESET}")
+    FILENAME = input(f"{color.PURPLE}[QUESTION]{color.RESET} What is the path of the student list .csv file?")
     create_multiple(FILENAME)
   elif user_choice in ["N", "n"]:
     NETID = input(f"{color.PURPLE}[QUESTION]{color.RESET} What is the NetID that you want to create?): ")
