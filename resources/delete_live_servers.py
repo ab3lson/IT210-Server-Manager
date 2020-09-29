@@ -21,6 +21,13 @@ class color:
   RESET = '\033[00m'
 
 def get_vmid(NETID):
+  """
+  Maps the supplied NetID to a Virtual Machine ID.
+
+  Parameters:
+    NETID: The NetID to get the VM ID for
+  """
+
   cmd = "pct list | tail -n +2 | awk '{sub(/-210/,\"\"); print $1 \",\"$3}'"
   vm_ids = subprocess.check_output(cmd, shell=True).decode("utf-8") 
   container_info = [row for row in csv.reader(vm_ids.splitlines(), delimiter=',')]
@@ -44,7 +51,15 @@ def pct_unlock(container_id):
   cmd = f"pct unlock {container_id}"
   return subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-def delete(container_id, NETID):
+def delete(container_id, NETID="not supplied"):
+  """
+  Deletes one Virtual Machine at the specified VM ID.
+
+  Parameters:
+    contianer_id: The VM ID of the Virutal Machine to be deleted
+    NETID: The NetID of the server to delete. For output only. (optional)
+  """
+
   if int(container_id) < 100:
     print(f"{color.RED}[ERROR]{color.RESET} The container ID must be at least 100. Please try again.")
     exit()
@@ -78,6 +93,10 @@ def delete(container_id, NETID):
     print(f"\033[F\033[F{color.GREEN}[SUCCESS]{color.RESET} Server deleted for {color.YELLOW + NETID + color.RESET}!")
 
 def delete_multiple():
+  """
+  Deletes multiple virtual machines. Asks user to supply range of VM IDs to delete.
+  """
+
   RANGE_START = int(input(f"{color.PURPLE}[QUESTION]{color.RESET} What VM ID do you want to start at?: "))
   RANGE_END = int(input(f"{color.PURPLE}[QUESTION]{color.RESET} What VM ID do you want to end at?: ")) + 1
   confirm = input(f"Are you sure that you want to delete all servers between {color.BLUE + str(RANGE_START) + color.RESET} and {color.BLUE + str(int(RANGE_END - 1)) + color.RESET}? (Y/N): ")
@@ -91,6 +110,12 @@ def delete_multiple():
   print(f"\n{color.BLUE}[COMPLETE]{color.RESET} All servers between {color.BLUE + str(RANGE_START) + color.RESET} and {color.BLUE + str(RANGE_END) + color.RESET} were deleted!")
 
 def delete_one(NETID):
+  """
+  Deletes the Virtual Machine for the supplied NetID.
+
+  Parameters:
+    NETID: The NetID of the server to be deleted.
+  """
   #match student netID to container ID
   container_id = get_vmid(NETID)
   confirm = input(f"Are you sure that you want to delete the account for {color.YELLOW + NETID + color.RESET} (VM ID: {color.YELLOW + str(container_id) + color.RESET})? (Y/N): ")
@@ -100,6 +125,10 @@ def delete_one(NETID):
     exit()
 
 def menu():
+  """
+  Checks user option from main menu
+  """
+
   user_choice = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to delete more than one server? (Y/N): ")
   if user_choice in ["Y", "y"]:
     delete_multiple()

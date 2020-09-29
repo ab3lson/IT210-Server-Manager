@@ -53,7 +53,7 @@ if __name__ == "__main__":
     create_live_servers.create_multiple(args.create[0])
   elif args.create_one:
     create_live_servers.create_one(args.create_one[0])
-  elif args.delete == [] or args.delete:  #no argument is possible
+  elif args.delete == [] or args.delete:  #no argument is required
     delete_live_servers.delete_multiple()
   elif args.delete_one:
     delete_live_servers.delete_one(args.delete_one[0])
@@ -64,15 +64,17 @@ if __name__ == "__main__":
   elif args.list == [] or args.list:  #no argument is required
     admin_tools.list(args.list)  #passes NetID if provided
   elif len(sys.argv) < 2:
+    #more options can be created in main menu by appending to this array
     menu_options = ["Create server(s)", "Delete Server(s)", "Enter server", "Move server", "List servers"]
-    main_menu(menu_options)
+    main_menu(menu_options) #prints main menu
     user_choice = input("Pick an action: ")
     try:
       if not 0<int(user_choice)<6:
         print(f"{color.RED}[ERROR]{color.RESET} Invalid input.")
         exit()
-    except:
+    except: #Fails if user input is not an int
       print(f"{color.RED}[ERROR]{color.RESET} Invalid input.")
+      exit()
 
     if user_choice =="1":
       create_live_servers.menu()

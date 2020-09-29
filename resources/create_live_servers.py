@@ -24,14 +24,28 @@ class color:
   UNDERLINE = '\033[4m'
   RESET = '\033[00m'
 
-
 def next_admin_vm_id():
+  """
+  Gets VM ID of next Virtual Machine above 900 (the admin range)
+  """
+
   cmd = "pct list | grep -e ^9 | awk 'END{print $1}'" #gets the last VM ID that starts with a 9 (admin range)
   output = subprocess.check_output(cmd, shell=True).decode("utf-8")  #returns last admin VM ID
   if '9' not in output: return 900
   else: return int(output) + 1
 
-def create(student, IP=START_IP, IS_ADMIN=0, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
+def create(student, IP=START_IP, IS_ADMIN=False, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
+  """
+  Creates a Virtual Machine using pct create and a custom IT 210 Ubuntu 20 image
+
+  Parameters:
+    student: a student class that contains the NetID, first name, and last name
+    IP: The last octet of the IP address for the server (will be created in 192.168.90.0/24) (optional)
+    IS_ADMIN: Boolean that states if the user will be given an admin VM ID (over 900). (optional)
+    END_IP: The highest number that the last octet can go. Defaults to END_IP. (optional)
+    ADMIN_START_IP: The starting IP for the admin IP addresses. Defaults to ADMIN_START_IP. (optional)
+  """
+
   if ADMIN_START_IP > int(IP) > END_IP:
     print(f"{color.RED}[ERROR]{color.RESET} Trying to create an IP out of the 192.168.90.50-255 range. Trying to create 192.168.90.{IP}.\nStopping!")
     exit()
@@ -55,10 +69,25 @@ def create(student, IP=START_IP, IS_ADMIN=0, END_IP=END_IP, ADMIN_START_IP=ADMIN
   print(f"{color.GREEN}[SUCCESS]{color.RESET} Account created for {color.YELLOW + student.netID + color.RESET}: ssh webadmin@192.168.90.{IP}!\n")
 
 def check_ip(IP):
+  """
+  Checks if an IP address is active. Returns 0 for active, 1 for inactive.
+
+  Parameters:
+    IP: The last octet of the IP to ping
+  """
   cmd = f"ping -c 1 -w 3 192.168.90.{str(IP)}"
   return subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 def get_next_IP(START_IP=START_IP, END_IP=END_IP):
+  """
+  Checks for the next available IP range to start assigning IP addresses. If a free IP is found, it verifies
+  that the following IP is also available.
+
+  Parameters:
+    START_IP: The last octet of the starting ping sweep range. Defaults to START_IP (optional)
+    END_IP: The last octet of the ending ping sweep range. Defaults to END_IP (optional)
+  """
+
   print(f"{color.BLUE}[WAIT]{color.RESET} Checking for next available IP address. Please wait...")
   for ip in range(START_IP, END_IP):
     res = check_ip(str(ip))
@@ -73,6 +102,17 @@ def get_next_IP(START_IP=START_IP, END_IP=END_IP):
   exit()
 
 def create_multiple(FILENAME, START_IP=START_IP):
+  """
+  Creates multiple servers for students from a .csv.
+
+  Parameters:
+    FILENAME: The path to the .csv
+    START_IP: The last octet for the start of the new servers' range. Defaults to START_IP. (optional)
+  Notes:
+    The first line of the .csv will be skipped to avoid using table headers.
+    The .csv should follow the following format: LAST_NAME,FIRSTNAME,NETID
+  """
+
   student_list = []
   if ".csv" not in FILENAME:
     print(f"{color.RED}[ERROR]{color.RESET} The supplied filename, {FILENAME} does not appear to be a .csv file.")
@@ -112,6 +152,16 @@ def create_multiple(FILENAME, START_IP=START_IP):
 
 
 def create_one(NETID, START_IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
+  """
+  Creates a server for the supplied NetID.
+
+  Parameters:
+    NETID: The NetID of the server to be created.
+    START_IP: The start of the range that the IP could be. Defaults to START_IP. (optional)
+    END_IP: The highest number that the last octet can go. Defaults to END_IP. (optional)
+    ADMIN_START_IP: The starting IP for the admin IP addresses. Defaults to ADMIN_START_IP. (optional)
+  """
+
   temp_student = Student(NETID, NETID, NETID)
   IS_ADMIN = 0
   is_admin = input(f"{color.PURPLE}[QUESTION]{color.RESET} Is this an admin/TA account? (Y/N): ")
@@ -128,6 +178,9 @@ def create_one(NETID, START_IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_STA
   exit()
 
 def menu():
+  """
+  Checks user option from main menu
+  """
   user_choice = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to create more than one server? (Y/N): ")
   if user_choice in ["Y", "y"]:
     print(f"{color.BLUE}[INFO]{color.RESET} You can import a .csv file of students to create live servers for.\nIt should be in the following format: {color.YELLOW}LAST_NAME,FIRSTNAME,NETID{color.RESET}")

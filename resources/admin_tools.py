@@ -4,9 +4,6 @@ import shlex
 import csv
 import time
 
-ADMIN_START_IP=50
-START_IP = 60     #This is the start of the last octet that will be used for students in 192.168.10.0/24
-END_IP = 255
 
 class Student:
   def __init__(self, first_name, last_name, netID):
@@ -25,6 +22,13 @@ class color:
   RESET = '\033[00m'
 
 def get_vmid(NETID):
+  """
+  Maps the supplied NetID to a Virtual Machine ID.
+
+  Parameters:
+    NETID: The NetID to get the VM ID for
+  """
+
   cmd = "pct list | tail -n +2 | awk '{sub(/-210/,\"\"); print $1 \",\"$3}'"
   vm_ids = subprocess.check_output(cmd, shell=True).decode("utf-8") 
   container_info = [row for row in csv.reader(vm_ids.splitlines(), delimiter=',')]
@@ -36,7 +40,15 @@ def get_vmid(NETID):
     print(f"{color.RED}[ERROR]{color.RESET} The NetID {color.YELLOW + NETID + color.RESET} could not be found. Please make sure that it exists and try again.")
     exit()
 
-def list(NETID):
+def list(NETID="all_students"):
+  """
+  Uses the pct list command to get Virtual Machine IDs. 
+  If no params are given, then all VM IDs and NetIDs are given.
+  
+  Parameters:
+    NETID: The NetID of the student to look up (optional)
+  """
+
   if NETID != "all_students":
     #match student netID to container ID
     container_id = get_vmid(NETID)
@@ -47,14 +59,34 @@ def list(NETID):
     print(subprocess.check_output(cmd, shell=True).decode("utf-8"))
 
 def enter(NETID):
+  """
+  Enters the Virtual Machine for the supplied NetID.
+
+  Parameters:
+    NETID: The NetID of the server to enter
+  """
+
   vm_id = get_vmid(NETID)
   print(f"{color.YELLOW}[INFO]{color.RESET} Entering {color.YELLOW + NETID + color.RESET} (VM ID: {vm_id})... Press {color.PURPLE}ctrl + d{color.RESET} to exit!")
   cmd = f"pct enter {vm_id}"
   subprocess.run(shlex.split(cmd))
 
-def move(NETID):
-  new_vm_id = input(f"{color.PURPLE}[QUESTION]{color.RESET} What do you want their new VM ID to be? (Admin/TA range starts at 900): ")
-  container_id = get_vmid(NETID)
+def move(NETID, container_id=False, new_vm_id=False):
+  """
+  Moves a Virtual Machine to a new VM ID.
+
+  Parameters:
+    NETID: The NetID of the server to move
+    container_id: The current VM ID of the Virtual Machine (optional)
+    new_vm_id: The new VM ID that the server will be moved to (optional)
+  Notes:
+    Admin/TA range starts at VM ID 900. This makes VM management easier, because
+    student VM IDs are separated from Admin VM IDs.
+  """
+
+  if not container_id and not new_vm_id: #gets info from user, if it was not supplied
+    new_vm_id = input(f"{color.PURPLE}[QUESTION]{color.RESET} What do you want their new VM ID to be? (Admin/TA range starts at 900): ")
+    container_id = get_vmid(NETID)
   print(f"{color.YELLOW}[INFO]{color.RESET} Stopping {color.YELLOW + NETID + color.RESET}\'s live server (VM ID: {container_id}) ... ", end='')
   cmd = f"pct stop {container_id}"
   res = subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -92,6 +124,9 @@ def move(NETID):
   else: print(f"{color.GREEN}[SUCCESS]{color.RESET}")
 
 def menu(menu_opt="none"):
+  """
+  Checks user option from main menu
+  """
   if menu_opt == "move":
     NETID = input(f"{color.PURPLE}[QUESTION]{color.RESET} What is the NetID that you would like to move?: ")
     move(NETID)
@@ -99,5 +134,5 @@ def menu(menu_opt="none"):
     NETID = input(f"{color.PURPLE}[QUESTION]{color.RESET} What is the NetID that you would like to enter?: ")
     enter(NETID)
   elif menu_opt == "list":
-    list("all_students")
+    list()
   else: exit()
