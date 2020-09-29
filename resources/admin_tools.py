@@ -91,4 +91,13 @@ def move(NETID):
       exit()
   else: print(f"{color.GREEN}[SUCCESS]{color.RESET}")
 
-
+def menu(menu_opt="none"):
+  if menu_opt == "move":
+    NETID = input(f"{color.PURPLE}[QUESTION]{color.RESET} What is the NetID that you would like to move?: ")
+    move(NETID)
+  elif menu_opt == "enter":
+    NETID = input(f"{color.PURPLE}[QUESTION]{color.RESET} What is the NetID that you would like to enter?: ")
+    enter(NETID)
+  elif menu_opt == "list":
+    list("all_students")
+  else: exit()

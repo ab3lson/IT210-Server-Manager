@@ -104,11 +104,13 @@ def delete_one(NETID):
   else:
     exit()
 
+def menu():
+  user_choice = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to delete more than one server? (Y/N): ")
+  if user_choice in ["Y", "y"]:
+    delete_multiple()
+  elif user_choice in ["N", "n"]:
+    NETID = input(f"{color.PURPLE}[QUESTION]{color.RESET} What is the NetID that you want to delete?: ")
+    delete_one(NETID)
+
 if __name__ == "__main__":
-  RANGE_START = input("What VM ID do you want to start at?: ")
-  RANGE_END = input("What VM ID do you want to end at?: ")
-  to_delete = RANGE_START
-  for student in range(RANGE_START, RANGE_END):
-    delete(to_delete, "VM ID: " + str(to_delete))
-    to_delete += 1
-  print(f"\n{color.BLUE}[COMPLETE]{color.RESET} All servers between {color.BLUE + str(RANGE_START) + color.RESET} and {color.BLUE + str(RANGE_END) + color.RESET} were deleted!")
+  menu()

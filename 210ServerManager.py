@@ -5,7 +5,17 @@ import os
 import sys
 from resources import *
 
-def main_menu():
+class color:
+  PURPLE = '\033[95m'
+  BLUE = '\033[94m'
+  GREEN = '\033[92m'
+  YELLOW = '\033[93m'
+  RED = '\033[91m'
+  BOLD = '\033[1m'
+  UNDERLINE = '\033[4m'
+  RESET = '\033[00m'
+
+def main_menu(menu_options):
   print("""
 ██████╗  ██╗ ██████╗     ███████╗███████╗██████╗ ██╗   ██╗███████╗██████╗ ███████╗
 ╚════██╗███║██╔═████╗    ██╔════╝██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗██╔════╝
@@ -14,10 +24,13 @@ def main_menu():
 ███████╗ ██║╚██████╔╝    ███████║███████╗██║  ██║ ╚████╔╝ ███████╗██║  ██║███████║
 ╚══════╝ ╚═╝ ╚═════╝     ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝╚══════╝
 Optional: Use with -h or --help for command line arguments
-
-
   """)
-  exit()
+
+  for i, option in enumerate(menu_options):
+    if i %2 == 0: print("")
+    print(f"{color.BLUE}[{i + 1}]{color.RESET} {menu_options[i]}", end='\t')
+  print("\n")
+
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(prog='210ServerManager.py', description="IT 210 Live Server Management Tool.", add_help=False)
@@ -33,13 +46,8 @@ if __name__ == "__main__":
   admin.add_argument('-m','--move', type=str, action='store', metavar='NETID', nargs=1, help='move a live server to a different IP')
   admin.add_argument('-l','--list', type=str, action='store', metavar='NETID', nargs='?', const='all_students', help='display a list of paired NetIDs and VM IDs')
 
-
   parser.add_argument('-h','--help', action='help', help='show this help message and exit')
-
   args = parser.parse_args()
-
-  if len(sys.argv) < 2:
-    main_menu()
 
   if args.create:
     create_live_servers.create_multiple(args.create[0])
@@ -55,6 +63,25 @@ if __name__ == "__main__":
     admin_tools.enter(args.enter[0])
   elif args.list == [] or args.list:  #no argument is required
     admin_tools.list(args.list)  #passes NetID if provided
+  elif len(sys.argv) < 2:
+    menu_options = ["Create server(s)", "Delete Server(s)", "Enter server", "Move server", "List servers"]
+    main_menu(menu_options)
+    user_choice = input("Pick an action: ")
+    if not 0<int(user_choice)<6:
+      print(f"{color.RED}[ERROR]{color.RESET} Invalid input.")
+      exit()
+    if user_choice =="1":
+      create_live_servers.menu()
+    elif user_choice == "2":
+      delete_live_servers.menu()
+    elif user_choice == "3":
+      admin_tools.menu("enter")
+    elif user_choice == "4":
+      admin_tools.menu("move")
+    elif user_choice == "5":
+      admin_tools.menu("list")
+    else:
+      exit()
   else:
     raise Exception("Invalid arguments were chosen.")
     exit()
