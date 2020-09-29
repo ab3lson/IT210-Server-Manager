@@ -122,6 +122,7 @@ def move(NETID, container_id=False, new_vm_id=False):
       print(f"{color.RED}[FAIL]{color.RESET}\n The new container could not be started.")
       exit()
   else: print(f"{color.GREEN}[SUCCESS]{color.RESET}")
+  print(f"{color.YELLOW}[INFO]{color.RESET} The IP address is still the same. If you want to edit this, you can do so in the network settings for the VM at the Proxmox web GUI:\nhttps://192.168.10.41:8006/")
 
 def menu(menu_opt="none"):
   """
