@@ -82,7 +82,7 @@ def move(NETID):
       print(f"{color.RED}[FAIL]{color.RESET}\n The container could not be deleted.")
       exit()
   else: print(f"{color.GREEN}[SUCCESS]{color.RESET}")
-  print(f"{color.YELLOW}[INFO]{color.RESET} Starting new VM ID {color.YELLOW + str(container_id) + color.RESET} ... ", end='')
+  print(f"{color.YELLOW}[INFO]{color.RESET} Starting new VM ID {color.YELLOW + str(new_vm_id) + color.RESET} ... ", end='')
   cmd = f"pct start {new_vm_id}"
   res = subprocess.call(shlex.split(cmd), stdout=subprocess.PIPE)
   time.sleep(3)
