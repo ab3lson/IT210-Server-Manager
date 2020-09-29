@@ -5,6 +5,7 @@ import shlex
 import time
 
 ADMIN_START_IP=100
+ADMIN_END_IP = 109
 ADMIN_START_VM_ID = 900
 START_IP = 110     #This is the start of the last octet that will be used for students in 192.168.90.0/24
 END_IP = 255
@@ -151,7 +152,7 @@ def create_multiple(FILENAME, START_IP=START_IP):
   exit()
 
 
-def create_one(NETID, START_IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
+def create_one(NETID, START_IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP, ADMIN_END_IP=ADMIN_END_IP):
   """
   Creates a server for the supplied NetID.
 
@@ -160,6 +161,7 @@ def create_one(NETID, START_IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_STA
     START_IP: The start of the range that the IP could be. Defaults to START_IP. (optional)
     END_IP: The highest number that the last octet can go. Defaults to END_IP. (optional)
     ADMIN_START_IP: The starting IP for the admin IP addresses. Defaults to ADMIN_START_IP. (optional)
+    ADMIN_END_IP: The ending IP for the admin IP addresses. Defaults to ADMIN_END_IP. (optional)
   """
 
   temp_student = Student(NETID, NETID, NETID)
@@ -167,7 +169,7 @@ def create_one(NETID, START_IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_STA
   is_admin = input(f"{color.PURPLE}[QUESTION]{color.RESET} Is this an admin/TA account? (Y/N): ")
   if is_admin in ["Y","y"]:
     START_IP = ADMIN_START_IP
-    END_IP = 59
+    END_IP = ADMIN_END_IP
     IS_ADMIN = 1
   next_ip = get_next_IP(START_IP, END_IP)
   print(f"{color.YELLOW}[INFO]{color.RESET} The next available IP address is: {color.BLUE}192.168.90.{str(next_ip) + color.RESET}")
