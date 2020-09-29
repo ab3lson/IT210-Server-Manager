@@ -4,9 +4,9 @@ import subprocess
 import shlex
 import time
 
-ADMIN_START_IP=50
+ADMIN_START_IP=100
 ADMIN_START_VM_ID = 900
-START_IP = 60     #This is the start of the last octet that will be used for students in 192.168.10.0/24
+START_IP = 110     #This is the start of the last octet that will be used for students in 192.168.90.0/24
 END_IP = 255
 class Student:
   def __init__(self, first_name, last_name, netID):
@@ -33,7 +33,7 @@ def next_admin_vm_id():
 
 def create(student, IP=START_IP, IS_ADMIN=0, END_IP=END_IP, ADMIN_START_IP=ADMIN_START_IP):
   if ADMIN_START_IP > int(IP) > END_IP:
-    print(f"{color.RED}[ERROR]{color.RESET} Trying to create an IP out of the 192.168.10.50-255 range. Trying to create 192.168.10.{IP}.\nStopping!")
+    print(f"{color.RED}[ERROR]{color.RESET} Trying to create an IP out of the 192.168.90.50-255 range. Trying to create 192.168.90.{IP}.\nStopping!")
     exit()
   if IS_ADMIN:
     print(f"{color.YELLOW}[INFO]{color.RESET} Getting next admin VM ID ... ", end="")
@@ -45,17 +45,17 @@ def create(student, IP=START_IP, IS_ADMIN=0, END_IP=END_IP, ADMIN_START_IP=ADMIN
                 /var/lib/vz/template/cache/ubuntu-20.04-210-student-template.tar.gz \
                 --cores 2 --cpuunits 2048 --memory 4096 --swap 512 \
                 --hostname {student.netID}-210 \
-                --net0 name=eth0,ip=192.168.10.{IP}/24,bridge=vmbr0,gw=192.168.4.1 \
+                --net0 name=eth0,ip=192.168.90.{IP}/24,bridge=vmbr0,gw=192.168.4.1 \
                 --rootfs local-lvm:16 \
                 --onboot 1 --start 1
               """)
   if return_val != 0:
     print(f"{color.RED}[ERROR]{color.RESET} There was an issue creating a live server for {color.YELLOW + student.netID + color.RESET}! Please check the above error code and try again.")
     exit()
-  print(f"{color.GREEN}[SUCCESS]{color.RESET} Account created for {color.YELLOW + student.netID + color.RESET}: ssh webadmin@192.168.10.{IP}!\n")
+  print(f"{color.GREEN}[SUCCESS]{color.RESET} Account created for {color.YELLOW + student.netID + color.RESET}: ssh webadmin@192.168.90.{IP}!\n")
 
 def check_ip(IP):
-  cmd = f"ping -c 1 -w 3 192.168.10.{str(IP)}"
+  cmd = f"ping -c 1 -w 3 192.168.90.{str(IP)}"
   return subprocess.call(shlex.split(cmd), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 def get_next_IP(START_IP=START_IP, END_IP=END_IP):
@@ -63,13 +63,13 @@ def get_next_IP(START_IP=START_IP, END_IP=END_IP):
   for ip in range(START_IP, END_IP):
     res = check_ip(str(ip))
     if res != 0:
-      print(f"{color.YELLOW}[INFO]{color.RESET} Confirming 192.168.10.{str(ip)} ... ", end='')
+      print(f"{color.YELLOW}[INFO]{color.RESET} Confirming 192.168.90.{str(ip)} ... ", end='')
       second_res = check_ip(str(ip + 1))
       if second_res != 0:
         print(f"{color.GREEN}CONFIRMED!{color.RESET}")
         return ip
       print(f"{color.RED}FAILURE!{color.RESET}\nNext IP occupied.. Trying to find another!")
-  print(f"{color.RED}[ERROR]{color.RESET} No empty IP addresses were found in 192.168.10.60-255. Please look into this and try again.")
+  print(f"{color.RED}[ERROR]{color.RESET} No empty IP addresses were found in 192.168.90.60-255. Please look into this and try again.")
   exit()
 
 def create_multiple(FILENAME, START_IP=START_IP):
@@ -99,9 +99,9 @@ def create_multiple(FILENAME, START_IP=START_IP):
     res = 0
     while not res:  #if ping returns 0, then the IP address is taken
       next_ip += 1
-      print(f"{color.BLUE}[WAIT]{color.RESET} Verifying that 192.168.10.{str(next_ip)} is available. Please wait ... ", end="")
+      print(f"{color.BLUE}[WAIT]{color.RESET} Verifying that 192.168.90.{str(next_ip)} is available. Please wait ... ", end="")
       if next_ip > 255:
-        print(f"{color.RED}[FAIL]{color.RESET}\nAll IPs in 192.168.10.0/24 are taken.")
+        print(f"{color.RED}[FAIL]{color.RESET}\nAll IPs in 192.168.90.0/24 are taken.")
         exit()
       res = check_ip(str(next_ip))
       if res == 0:
@@ -120,10 +120,10 @@ def create_one(NETID, START_IP=START_IP, END_IP=END_IP, ADMIN_START_IP=ADMIN_STA
     END_IP = 59
     IS_ADMIN = 1
   next_ip = get_next_IP(START_IP, END_IP)
-  print(f"{color.YELLOW}[INFO]{color.RESET} The next available IP address is: {color.BLUE}192.168.10.{str(next_ip) + color.RESET}")
+  print(f"{color.YELLOW}[INFO]{color.RESET} The next available IP address is: {color.BLUE}192.168.90.{str(next_ip) + color.RESET}")
   custom_ip = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to use this IP address? (Y/N): ")
   if custom_ip in ["N","n"]:
-    next_ip = input(f"Enter the last two digits of the IP address: 192.168.10.")
+    next_ip = input(f"Enter the last two digits of the IP address: 192.168.90.")
   create(temp_student, next_ip, IS_ADMIN)
   exit()
 

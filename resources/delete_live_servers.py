@@ -4,9 +4,6 @@ import shlex
 import csv
 import time
 
-ADMIN_START_IP=50
-START_IP = 60     #This is the start of the last octet that will be used for students in 192.168.10.0/24
-END_IP = 255
 class Student:
   def __init__(self, first_name, last_name, netID):
     self.first_name = first_name
@@ -23,7 +20,6 @@ class color:
   UNDERLINE = '\033[4m'
   RESET = '\033[00m'
 
-
 def get_vmid(NETID):
   cmd = "pct list | tail -n +2 | awk '{sub(/-210/,\"\"); print $1 \",\"$3}'"
   vm_ids = subprocess.check_output(cmd, shell=True).decode("utf-8") 
@@ -35,7 +31,6 @@ def get_vmid(NETID):
   if not container_id:
     print(f"{color.RED}[ERROR]{color.RESET} The NetID {color.YELLOW + NETID + color.RESET} could not be found. Please make sure that it exists and try again.")
     exit()
-
 
 def lxc_destory(container_id):
   cmd = f"lxc-destroy -f {container_id}"
