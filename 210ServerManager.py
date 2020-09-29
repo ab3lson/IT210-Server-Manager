@@ -67,9 +67,13 @@ if __name__ == "__main__":
     menu_options = ["Create server(s)", "Delete Server(s)", "Enter server", "Move server", "List servers"]
     main_menu(menu_options)
     user_choice = input("Pick an action: ")
-    if not 0<int(user_choice)<6:
+    try:
+      if not 0<int(user_choice)<6:
+        print(f"{color.RED}[ERROR]{color.RESET} Invalid input.")
+        exit()
+    except:
       print(f"{color.RED}[ERROR]{color.RESET} Invalid input.")
-      exit()
+
     if user_choice =="1":
       create_live_servers.menu()
     elif user_choice == "2":
