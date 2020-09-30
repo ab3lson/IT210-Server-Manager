@@ -55,11 +55,14 @@ def create_csv(container_id):
 def get_students_ip(user_input):
   student_list = []
   if ".csv" not in user_input:
-    print(f"{color.BLUE}[INFO]{color.RESET} Getting IP Address for: {user_input}...")
+    print(f"{color.BLUE}[INFO]{color.RESET} Getting IP Address for: {color.YELLOW + user_input + color.RESET}...")
+    vm_id = get_vmid(user_input)
+    ip = get_IP(vm_id)
+    print(f"NetID\tVM ID\tIP\n-----\t----\t----\n{user_input}\t{vm_id}\t{ip}")
   else:
     cmd = "pct list | tail -n +2 | awk '{print $1}'"
     container_ids_string = subprocess.check_output(cmd, shell=True).decode("utf-8")
-    container_ids = [row for row in csv.reader(container_ids_string.splitlines(), delimiter='')]
+    container_ids = [row for row in csv.reader(container_ids_string.splitlines())]
     student_list = []
     for container_id in container_ids:
       temp_student = {}
@@ -67,7 +70,7 @@ def get_students_ip(user_input):
       temp_student["netID"] = get_netid(container_id)
       temp_student["VM_ID"] = container_id
       student_list.append(temp_student)
-  print(f"NetID\t\tVM ID\t\tIP\n-----\t----\t----\n")
+  print(f"NetID\tVM ID\tIP\n-----\t----\t----\n")
   for student in student_list:
     print(f"{student['netID']}\t{student['VM_ID']}\t{student['ip']}")
 
