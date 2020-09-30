@@ -70,7 +70,7 @@ if __name__ == "__main__":
     main_menu(menu_options) #prints main menu
     user_choice = input("Pick an action: ")
     try:
-      if not 0<int(user_choice)<6:
+      if not 0<int(user_choice)<len(menu_options):
         print(f"{color.RED}[ERROR]{color.RESET} Invalid input.")
         exit()
     except: #Fails if user input is not an int
