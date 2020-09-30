@@ -40,6 +40,37 @@ def get_vmid(NETID):
     print(f"{color.RED}[ERROR]{color.RESET} The NetID {color.YELLOW + NETID + color.RESET} could not be found. Please make sure that it exists and try again.")
     exit()
 
+def get_IP(container_id):
+  cmd = "pct config {} | grep 'net0: ' | awk -F \"\\\"*,\\\"*\" '{print $5}' | awk '{sub(/ip=/,""); print}'".format(container_id)
+  return subprocess.check_output(cmd, shell=True).decode("utf-8")
+
+def get_netid(container_id):
+  cmd = "pct config {} | grep 'hostname: ' | awk '{sub(/-210/,\"\"); sub(/hostname: /,\"\"); print}'".format(container_id)
+  return subprocess.check_output(cmd, shell=True).decode("utf-8")
+
+def create_csv(container_id):
+
+    pass
+
+def get_students_ip(user_input):
+  student_list = []
+  if ".csv" not in user_input:
+    print(f"{color.BLUE}[INFO]{color.RESET} Getting IP Address for: {user_input}...")
+  else:
+    cmd = "pct list | tail -n +2 | awk '{print $1}'"
+    container_ids_string = subprocess.check_output(cmd, shell=True).decode("utf-8")
+    container_ids = [row for row in csv.reader(container_ids_string.splitlines(), delimiter='')]
+    student_list = []
+    for container_id in container_ids:
+      temp_student = {}
+      temp_student["ip"] = get_IP(container_id)
+      temp_student["netID"] = get_netid(container_id)
+      temp_student["VM_ID"] = container_id
+      student_list.append(temp_student)
+  print(f"NetID\t\tVM ID\t\tIP\n-----\t----\t----\n")
+  for student in student_list:
+    print(f"{student['netID']}\t{student['VM_ID']}\t{student['ip']}")
+
 def list(NETID="all_students"):
   """
   Uses the pct list command to get Virtual Machine IDs. 
@@ -136,4 +167,7 @@ def menu(menu_opt="none"):
     enter(NETID)
   elif menu_opt == "list":
     list()
+  elif menu_opt == "ip":
+    user_input = input(f"{color.PURPLE}[QUESTION]{color.RESET} What is the NetID or the file path for the .csv containing multiple students?: ")
+    get_students_ip(user_input)
   else: exit()

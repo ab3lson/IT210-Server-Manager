@@ -66,7 +66,7 @@ if __name__ == "__main__":
     admin_tools.list(args.list)  #passes NetID if provided
   elif len(sys.argv) < 2:
     #more options can be created in main menu by appending to this array
-    menu_options = ["Create server(s)", "Delete Server(s)", "Enter server", "Move server", "List servers"]
+    menu_options = ["Create server(s)", "Delete Server(s)", "Enter server", "Move server", "List servers", "Get IP Address(s)"]
     main_menu(menu_options) #prints main menu
     user_choice = input("Pick an action: ")
     try:
@@ -87,6 +87,8 @@ if __name__ == "__main__":
       admin_tools.menu("move")
     elif user_choice == "5":
       admin_tools.menu("list")
+    elif user_choice == "6":
+      admin_tools.menu("ip")
     else:
       exit()
   else:
