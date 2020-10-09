@@ -57,6 +57,7 @@ def get_students_ip(user_input):
   if user_input == "all_servers":
     cmd = "pct list | tail -n +2 | awk '{print $1}'"
     container_ids_string = subprocess.check_output(cmd, shell=True).decode("utf-8").replace("\n",",")[:-1]
+    print("container_ids_string")
     container_ids = [row for row in csv.reader(container_ids_string.splitlines())]
     student_list = []
     print("Container_ids: ", container_ids)
