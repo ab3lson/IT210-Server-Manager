@@ -59,6 +59,7 @@ def get_students_ip(user_input):
     vm_id = get_vmid(user_input)
     ip = get_IP(vm_id)
     print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----\n{user_input}\t{vm_id}\t{ip}")
+    exit()
   else:
     cmd = "pct list | tail -n +2 | awk '{print $1}'"
     container_ids_string = subprocess.check_output(cmd, shell=True).decode("utf-8")
@@ -70,7 +71,7 @@ def get_students_ip(user_input):
       temp_student["netID"] = get_netid(container_id)
       temp_student["VM_ID"] = container_id
       student_list.append(temp_student)
-  print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----\n")
+    print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----\n")
   for student in student_list:
     print(f"{student['netID']}\t{student['VM_ID']}\t{student['ip']}")
 
