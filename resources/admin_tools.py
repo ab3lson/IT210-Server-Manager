@@ -41,12 +41,12 @@ def get_vmid(NETID):
     exit()
 
 def get_IP(container_id):
-  cmd = "pct config {} | grep 'net0: ' | awk -F \"\\\"*,\\\"*\" '{print $5}' | awk '{sub(/ip=/,""); print}'".format(container_id)
-  return subprocess.check_output(cmd, shell=True).decode("utf-8")
+  cmd = f"pct config {container_id} | grep 'net0: ' | awk -F \"\\\"*,\\\"*\" '{{print $5}}' | awk '{{sub(/ip=/,\"\"); print}}'"
+  return str(subprocess.check_output(cmd, shell=True).decode("utf-8"))[:-4] #removes newline and cidr subnet
 
 def get_netid(container_id):
-  cmd = "pct config {} | grep 'hostname: ' | awk '{sub(/-210/,\"\"); sub(/hostname: /,\"\"); print}'".format(container_id)
-  return subprocess.check_output(cmd, shell=True).decode("utf-8")
+  cmd = f"pct config {container_id} | grep 'hostname: ' | awk '{{sub(/-210/,\"\"); sub(/hostname: /,\"\"); print}}'"
+  return str(subprocess.check_output(cmd, shell=True).decode("utf-8"))
 
 def create_csv(container_id):
 
