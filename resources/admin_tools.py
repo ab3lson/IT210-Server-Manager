@@ -58,7 +58,7 @@ def get_students_ip(user_input):
     print(f"{color.BLUE}[INFO]{color.RESET} Getting IP Address for: {color.YELLOW + user_input + color.RESET}...")
     vm_id = get_vmid(user_input)
     ip = get_IP(vm_id)
-    print(f"NetID\tVM ID\tIP\n-----\t----\t----\n{user_input}\t{vm_id}\t{ip}")
+    print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----\n{user_input}\t{vm_id}\t{ip}")
   else:
     cmd = "pct list | tail -n +2 | awk '{print $1}'"
     container_ids_string = subprocess.check_output(cmd, shell=True).decode("utf-8")
