@@ -46,7 +46,7 @@ def get_IP(container_id):
 
 def get_netid(container_id):
   cmd = f"pct config {container_id} | grep 'hostname: ' | awk '{{sub(/-210/,\"\"); sub(/hostname: /,\"\"); print}}'"
-  return str(subprocess.check_output(cmd, shell=True).decode("utf-8"))[1:]
+  return str(subprocess.check_output(cmd, shell=True).decode("utf-8"))[0:-1]
 
 def create_csv(container_id):
 
