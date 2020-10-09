@@ -82,6 +82,7 @@ def get_students_ip(user_input):
           else:
             try:
               netID = row[2][1:]  #removes \n from end of string
+              print("NetID: ",repr(netID))
             except IndexError as e:
               try:
                 print(f"{color.RED}[ERROR]{color.RESET} students.csv was formatted incorrectly. At least one row probably has less than three values. \nThe problem is in the line starting with: {row[0]}:",e)
