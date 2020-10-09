@@ -69,7 +69,7 @@ def get_students_ip(user_input):
       print("\033[F")
     print("")
   elif ".csv" not in user_input:
-    print(f"{color.BLUE}[INFO]{color.RESET} Getting IP Address for: {color.YELLOW + user_input + color.RESET}...")
+    print(f"{color.BLUE}[INFO]{color.RESET} Getting IP Address for VM ID: {color.YELLOW + user_input + color.RESET}...")
     vm_id = get_vmid(user_input)
     ip = get_IP(vm_id)
     print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----\n{user_input}\t{vm_id}\t{ip}")
@@ -103,7 +103,7 @@ def get_students_ip(user_input):
   print("")
   print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----")
   for server in student_list:
-    print(f"{server['netID']}{{:<16s}}{server['VM_ID']}\t{server['IP']}")
+    print(f"{server['netID']:<16s}{server['VM_ID']}\t{server['IP']}")
 
 def list(NETID="all_students"):
   """
