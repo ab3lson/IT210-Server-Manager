@@ -58,7 +58,6 @@ def get_students_ip(user_input):
     cmd = "pct list | tail -n +2 | awk '{print $1}'"
     container_ids_string = subprocess.check_output(cmd, shell=True).decode("utf-8")
     container_ids = [row for row in csv.reader(container_ids_string.splitlines())]
-    student_list = []
     for container_id in container_ids:
       print(f"{color.YELLOW}[INFO]{color.RESET} Getting IP address for VM ID: {color.YELLOW + str(container_id[0]) + color.RESET}", end="")
       temp_student = {}
@@ -103,8 +102,8 @@ def get_students_ip(user_input):
   print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----")
   for server in student_list:
     print(f"{server['netID']:<16s}{server['VM_ID']}\t{server['IP']}")
-  create_csv = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to create an output .csv for the Reverse Proxy? (Y/N): ")
-  if create_csv in ["Y", "y"]:
+  output_choice = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to create an output .csv for the Reverse Proxy? (Y/N): ")
+  if output_choice in ["Y", "y"]:
     create_csv(student_list)
 
 def create_csv(student_list):
