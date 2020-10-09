@@ -48,21 +48,34 @@ def get_netid(container_id):
   cmd = f"pct config {container_id} | grep 'hostname: ' | awk '{{sub(/-210/,\"\"); sub(/hostname: /,\"\"); print}}'"
   return str(subprocess.check_output(cmd, shell=True).decode("utf-8"))[0:-1]
 
+def get_all_servers_info():
+  student_list = []
+  cmd = "pct list | tail -n +2 | awk '{print $1}'"
+  container_ids_string = subprocess.check_output(cmd, shell=True).decode("utf-8")
+  container_ids = [row for row in csv.reader(container_ids_string.splitlines())]
+  for container_id in container_ids:
+    print(f"{color.YELLOW}[INFO]{color.RESET} Getting IP address for VM ID: {color.YELLOW + str(container_id[0]) + color.RESET}", end="")
+    temp_student = {}
+    temp_student["IP"] = get_IP(container_id[0])
+    temp_student["netID"] = get_netid(container_id[0])
+    temp_student["VM_ID"] = container_id[0]
+    student_list.append(temp_student)
+    print("\033[F")
+  print("")
+  return student_list
+
+def get_single_server_info():
+  pass
+
+def print_table(server_list):
+  print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----")
+  for server in server_list:
+    print(f"{server['netID']:<16s}{server['VM_ID']}\t{server['IP']}")
+
 def get_students_ip(user_input):
   student_list = []
   if user_input == "all_servers":
-    cmd = "pct list | tail -n +2 | awk '{print $1}'"
-    container_ids_string = subprocess.check_output(cmd, shell=True).decode("utf-8")
-    container_ids = [row for row in csv.reader(container_ids_string.splitlines())]
-    for container_id in container_ids:
-      print(f"{color.YELLOW}[INFO]{color.RESET} Getting IP address for VM ID: {color.YELLOW + str(container_id[0]) + color.RESET}", end="")
-      temp_student = {}
-      temp_student["IP"] = get_IP(container_id[0])
-      temp_student["netID"] = get_netid(container_id[0])
-      temp_student["VM_ID"] = container_id[0]
-      student_list.append(temp_student)
-      print("\033[F")
-    print("")
+    student_list = get_all_servers_info()
   elif ".csv" not in user_input:
     print(f"{color.BLUE}[INFO]{color.RESET} Getting IP Address for: {color.YELLOW + user_input + color.RESET}...")
     vm_id = get_vmid(user_input)
@@ -95,9 +108,7 @@ def get_students_ip(user_input):
       server["IP"] = get_IP(server["VM_ID"])
       print("\033[F")
   print("")
-  print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----")
-  for server in student_list:
-    print(f"{server['netID']:<16s}{server['VM_ID']}\t{server['IP']}")
+  print_table(student_list)
   output_choice = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to create an output .csv for the Reverse Proxy? (Y/N): ")
   if output_choice in ["Y", "y"]:
     create_csv(student_list)
@@ -120,28 +131,13 @@ def list(NETID="all_students"):
   """
 
   if NETID != "all_students":
-    #match student netID to container ID
     container_id = get_vmid(NETID)
     IP = get_IP(container_id)
     print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----")
     print(f"{NETID:<16s}\t{container_id}\t{IP}")
   else:
-    student_list = []
-    cmd = "pct list | tail -n +2 | awk '{print $1}'"
-    container_ids_string = subprocess.check_output(cmd, shell=True).decode("utf-8")
-    container_ids = [row for row in csv.reader(container_ids_string.splitlines())]
-    for container_id in container_ids:
-      print(f"{color.YELLOW}[INFO]{color.RESET} Getting IP address for VM ID: {color.YELLOW + str(container_id[0]) + color.RESET}", end="")
-      temp_student = {}
-      temp_student["IP"] = get_IP(container_id[0])
-      temp_student["netID"] = get_netid(container_id[0])
-      temp_student["VM_ID"] = container_id[0]
-      student_list.append(temp_student)
-      print("\033[F")
-    print("")
-    print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----")
-    for server in student_list:
-      print(f"{server['netID']:<16s}{server['VM_ID']}\t{server['IP']}")
+    student_list = get_all_servers_info()
+    print_table(student_list)
     
 
 def enter(NETID):
