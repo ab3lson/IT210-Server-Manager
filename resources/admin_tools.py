@@ -81,7 +81,7 @@ def get_students_ip(user_input):
             line_count += 1   #jumps the reader ahead one row
           else:
             try:
-              netID = row[2]
+              netID = row[2][1:]  #removes \n from end of string
             except IndexError as e:
               try:
                 print(f"{color.RED}[ERROR]{color.RESET} students.csv was formatted incorrectly. At least one row probably has less than three values. \nThe problem is in the line starting with: {row[0]}:",e)
@@ -97,7 +97,7 @@ def get_students_ip(user_input):
       server["IP"] = get_IP(server["VM_ID"])
   print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----")
   for server in student_list:
-    print(f"{repr(server['netID'])}\t{repr(server['VM_ID'])}\t{server['IP']}")
+    print(f"{server['netID']}\t{server['VM_ID']}\t{server['IP']}")
 
 def list(NETID="all_students"):
   """
