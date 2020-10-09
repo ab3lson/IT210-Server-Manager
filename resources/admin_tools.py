@@ -63,7 +63,7 @@ def get_students_ip(user_input):
       print(f"{color.YELLOW}[INFO]{color.RESET} Getting IP address for: {color.YELLOW + str(container_id[0]) + color.RESET}", end="")
       temp_student = {}
       temp_student["IP"] = get_IP(container_id[0])
-      temp_student["netID"] = get_netid(container_id[0][1:])
+      temp_student["netID"] = get_netid(container_id[0])
       temp_student["VM_ID"] = container_id[0]
       student_list.append(temp_student)
       print("\033[F")
