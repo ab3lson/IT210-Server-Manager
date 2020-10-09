@@ -67,12 +67,14 @@ def delete(container_id, NETID="not supplied"):
   res = lxc_destory(container_id) #TODO Speed up: Try looping this command through the entire range and let them shut down together, then run pct destroy
   if res != 0 and res !=1:      #if there is an error
     print(f"{color.RED}[ERROR]{color.RESET} The server for {color.YELLOW + NETID + color.RESET} could not be deleted. Response code to lxc-destroy -f was {res} ")
+    exit()
   elif res == 1:                          # if the container deletion failed the first time, it may have been shutting down still
     res = pct_destroy(container_id)
     if res == 255:
       print(f"{color.YELLOW}[INFO]{color.RESET} The server for {color.YELLOW + NETID + color.RESET} could not be deleted. It may be locked... trying \"pct unlock {container_id}\"")
       res = pct_unlock(container_id)
-      if res != 0: exit()
+      if res == 2: print(f"{color.RED}[ERROR]{color.RESET} VM ID {color.YELLOW + container_id + color.RESET} was not deleted. It was probably aleady deleted. SKIPPING!")
+      elif res != 0: exit()
       else: res = pct_destroy(container_id)
       if res != 0:
         print(f"{color.RED}[ERROR]{color.RESET} The server for {color.YELLOW + NETID + color.RESET} could not be deleted. Response code to pct destroy was {res}")
