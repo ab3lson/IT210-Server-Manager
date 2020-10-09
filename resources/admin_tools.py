@@ -59,7 +59,9 @@ def get_students_ip(user_input):
     container_ids_string = subprocess.check_output(cmd, shell=True).decode("utf-8").replace("\n",",")[:-1]
     container_ids = [row for row in csv.reader(container_ids_string.splitlines())]
     student_list = []
+    print("Container_ids: ", container_ids)
     for container_id in container_ids:
+      print("Container_id:", container_id)
       temp_student = {}
       temp_student["IP"] = get_IP(container_id)
       temp_student["netID"] = get_netid(container_id)
