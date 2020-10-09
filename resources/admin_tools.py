@@ -95,9 +95,9 @@ def get_students_ip(user_input):
     for server in student_list:
       server["VM_ID"] = get_vmid(server["netID"])
       server["IP"] = get_IP(server["VM_ID"])
-  print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----\n")
+  print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----")
   for server in student_list:
-    print(f"{server['netID']}\t{server['VM_ID']}\t{server['IP']}")
+    print(f"{repr(server['netID'])}\t{repr(server['VM_ID'])}\t{server['IP']}")
 
 def list(NETID="all_students"):
   """
