@@ -70,7 +70,7 @@ def get_students_ip(user_input):
       temp_student["netID"] = get_netid(container_id)
       temp_student["VM_ID"] = container_id
       student_list.append(temp_student)
-  print(f"NetID\tVM ID\tIP\n-----\t----\t----\n")
+  print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----\n")
   for student in student_list:
     print(f"{student['netID']}\t{student['VM_ID']}\t{student['ip']}")
 
