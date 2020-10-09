@@ -60,11 +60,14 @@ def get_students_ip(user_input):
     container_ids = [row for row in csv.reader(container_ids_string.splitlines())]
     student_list = []
     for container_id in container_ids:
+      print(f"{color.YELLOW}[INFO]{color.RESET} Getting IP address for: {color.YELLOW + server['netID'] + color.RESET}", end="")
       temp_student = {}
       temp_student["IP"] = get_IP(container_id[0])
-      temp_student["netID"] = get_netid(container_id[0])
+      temp_student["netID"] = get_netid(container_id[0][1:])
       temp_student["VM_ID"] = container_id[0]
       student_list.append(temp_student)
+      print("\033[F")
+    print("")
   elif ".csv" not in user_input:
     print(f"{color.BLUE}[INFO]{color.RESET} Getting IP Address for: {color.YELLOW + user_input + color.RESET}...")
     vm_id = get_vmid(user_input)
@@ -81,8 +84,7 @@ def get_students_ip(user_input):
             line_count += 1   #jumps the reader ahead one row
           else:
             try:
-              netID = row[2][1:]  #removes \n from end of string
-              print("NetID: ",repr(netID))
+              netID = row[2]
             except IndexError as e:
               try:
                 print(f"{color.RED}[ERROR]{color.RESET} students.csv was formatted incorrectly. At least one row probably has less than three values. \nThe problem is in the line starting with: {row[0]}:",e)
