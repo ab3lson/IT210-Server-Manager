@@ -93,8 +93,11 @@ def get_students_ip(user_input):
       print(f"{color.RED}[ERROR]{color.RESET} There was an error with the .csv: {e}")
       exit()
     for server in student_list:
+      print(f"{color.YELLOW}[INFO]{color.RESET} Getting IP address for: {color.YELLOW + server['netID'] + color.RESET}", end="")
       server["VM_ID"] = get_vmid(server["netID"])
       server["IP"] = get_IP(server["VM_ID"])
+      print("\033[F")
+  print("")
   print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----")
   for server in student_list:
     print(f"{server['netID']}\t{server['VM_ID']}\t{server['IP']}")
