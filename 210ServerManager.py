@@ -93,6 +93,7 @@ if __name__ == "__main__":
     elif user_choice == "5":
       admin_tools.menu("list")
     elif user_choice == "6":
+      print(f"{color.YELLOW}[INFO]{color.RESET} Generating reverse_proxy.csv! Please wait...")
       admin_tools.get_students_ip("all_servers")
     else:
       exit()
