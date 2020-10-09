@@ -126,7 +126,8 @@ def list(NETID="all_students"):
   if NETID != "all_students":
     #match student netID to container ID
     container_id = get_vmid(NETID)
-    print(f"NetID\t\tVM ID\n-----\t----\n{NETID}\t{container_id}")
+    IP = get_IP(container_id)
+    print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----\n{NETID:<16s}\t{container_id}\t{IP}")
   else:
     student_list = []
     cmd = "pct list | tail -n +2 | awk '{print $1}'"
