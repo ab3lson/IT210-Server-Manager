@@ -134,7 +134,7 @@ def list(NETID="all_students"):
     container_id = get_vmid(NETID)
     IP = get_IP(container_id)
     print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----")
-    print(f"{NETID:<16s}\t{container_id}\t{IP}")
+    print(f"{NETID:<16s}{container_id}\t{IP}")
   else:
     student_list = get_all_servers_info()
     print_table(student_list)
