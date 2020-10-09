@@ -67,6 +67,7 @@ if __name__ == "__main__":
   elif args.list == [] or args.list:  #no argument is required
     admin_tools.list(args.list)  #passes NetID if provided
   elif args.out == [] or args.out:  #no argument is required
+    print(f"{color.YELLOW}[INFO]{color.RESET} Generating reverse_proxy.csv! Please wait...")
     admin_tools.get_students_ip("all_servers")
   elif len(sys.argv) < 2:
     #more options can be created in main menu by appending to this array
