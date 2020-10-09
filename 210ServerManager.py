@@ -24,8 +24,7 @@ def main_menu(menu_options):
 ███████╗ ██║╚██████╔╝    ███████║███████╗██║  ██║ ╚████╔╝ ███████╗██║  ██║███████║
 ╚══════╝ ╚═╝ ╚═════╝     ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝╚══════╝
 {color.BLUE}Web GUI{color.RESET}: https://192.168.10.41:8006/
-{color.YELLOW}Optional{color.RESET}: Use with -h or --help for command line arguments
-  """)
+{color.YELLOW}Optional{color.RESET}: Use with -h or --help for command line arguments""")
 
   for i, option in enumerate(menu_options):
     if i %2 == 0: print("")
