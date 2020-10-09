@@ -92,7 +92,7 @@ if __name__ == "__main__":
     elif user_choice == "5":
       admin_tools.menu("list")
     elif user_choice == "6":
-      admin_tools.menu("ip")
+      admin_tools.get_students_ip("all_servers")
     else:
       exit()
   else:

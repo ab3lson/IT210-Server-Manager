@@ -64,9 +64,6 @@ def get_all_servers_info():
   print("")
   return student_list
 
-def get_single_server_info():
-  pass
-
 def print_table(server_list):
   print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----")
   for server in server_list:
@@ -76,12 +73,7 @@ def get_students_ip(user_input):
   student_list = []
   if user_input == "all_servers":
     student_list = get_all_servers_info()
-  elif ".csv" not in user_input:
-    print(f"{color.BLUE}[INFO]{color.RESET} Getting IP Address for: {color.YELLOW + user_input + color.RESET}...")
-    vm_id = get_vmid(user_input)
-    ip = get_IP(vm_id)
-    student_list.append({"netID": user_input, "VM_ID": vm_id, "IP": ip})
-  else:
+  else: #can pass in .csv file and creates output .csv
     try:
       with open(user_input) as student_csv:
         reader = csv.reader(student_csv, delimiter=',')
@@ -109,9 +101,7 @@ def get_students_ip(user_input):
       print("\033[F")
   print("")
   print_table(student_list)
-  output_choice = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to create an output .csv for the Reverse Proxy? (Y/N): ")
-  if output_choice in ["Y", "y"]:
-    create_csv(student_list)
+  create_csv(student_list)
 
 def create_csv(student_list):
   with open('./reverse_proxy.csv', 'w') as out:
@@ -218,11 +208,4 @@ def menu(menu_opt="none"):
     enter(NETID)
   elif menu_opt == "list":
     list()
-  elif menu_opt == "ip":
-    all_servers = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to get the IP for all servers (Y for Reverse Proxy setup)? (Y/N): ")
-    if all_servers in ["Y","y"]:
-      get_students_ip("all_servers")
-    else:
-      user_input = input(f"{color.PURPLE}[QUESTION]{color.RESET} What is the NetID or the file path for the .csv containing multiple students?: ")
-      get_students_ip(user_input)
   else: exit()
