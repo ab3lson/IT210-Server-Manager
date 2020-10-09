@@ -111,7 +111,8 @@ def create_csv(student_list):
     wr = csv.writer(out, quoting=csv.QUOTE_ALL)
     wr.writerow("IP_ADDR\tNAME")
     for student in student_list:
-      wr.writerow(student["IP"], student["netID"])
+      temp_list = [student["IP"], student["netID"]]
+      wr.writerow(temp_list)
 
 def list(NETID="all_students"):
   """
