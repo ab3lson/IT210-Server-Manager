@@ -108,11 +108,10 @@ def get_students_ip(user_input):
 
 def create_csv(student_list):
   with open('reverse_proxy.csv', 'w') as out:
-    wr = csv.writer(out, quoting=csv.QUOTE_ALL)
-    wr.writerow("IP_ADDR\tNAME")
+    wr = csv.writer(out, quoting=csv.QUOTE_MINIMAL)
+    wr.writerow(["IP_ADDR","NAME"])
     for student in student_list:
-      temp_list = [student["IP"], student["netID"]]
-      wr.writerow(temp_list)
+      wr.writerow([student["IP"], student["netID"]])
 
 def list(NETID="all_students"):
   """
