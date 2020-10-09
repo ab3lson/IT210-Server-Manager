@@ -45,7 +45,7 @@ if __name__ == "__main__":
   delete.add_argument('-do','--delete-one', type=str, action='store', metavar='NETID', nargs=1, help='deletes a live server for one student')
   admin.add_argument('-e','--enter', type=str, action='store', metavar='NETID', nargs=1, help='enter a student\'s live server')
   admin.add_argument('-m','--move', type=str, action='store', metavar='NETID', nargs=1, help='move a live server to a different IP')
-  admin.add_argument('-l','--list', type=str, action='store', metavar='NETID', nargs='?', const='all_students', help='display a list of paired NetIDs and VM IDs')
+  admin.add_argument('-l','--list', type=str, action='store', metavar='NETID', nargs='?', const='all_students', help='display a list of NetID, IP, and VM ID')
 
   parser.add_argument('-h','--help', action='help', help='show this help message and exit')
   args = parser.parse_args()
