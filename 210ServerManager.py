@@ -29,7 +29,7 @@ def main_menu(menu_options):
 
   for i, option in enumerate(menu_options):
     if i %2 == 0: print("")
-    print(f"{color.BLUE}[{i + 1}]{color.RESET} {menu_options[i]:<20s}", end='\t')
+    print(f"{color.BLUE}[{i + 1}]{color.RESET} {menu_options[i]:<20s}", end='')
   print("\n")
 
 
