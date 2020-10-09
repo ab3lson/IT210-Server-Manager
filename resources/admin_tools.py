@@ -60,7 +60,7 @@ def get_students_ip(user_input):
     container_ids = [row for row in csv.reader(container_ids_string.splitlines())]
     student_list = []
     for container_id in container_ids:
-      print(f"{color.YELLOW}[INFO]{color.RESET} Getting IP address for: {color.YELLOW + str(container_id[0]) + color.RESET}", end="")
+      print(f"{color.YELLOW}[INFO]{color.RESET} Getting IP address for VM ID: {color.YELLOW + str(container_id[0]) + color.RESET}", end="")
       temp_student = {}
       temp_student["IP"] = get_IP(container_id[0])
       temp_student["netID"] = get_netid(container_id[0])
@@ -69,11 +69,10 @@ def get_students_ip(user_input):
       print("\033[F")
     print("")
   elif ".csv" not in user_input:
-    print(f"{color.BLUE}[INFO]{color.RESET} Getting IP Address for VM ID: {color.YELLOW + user_input + color.RESET}...")
+    print(f"{color.BLUE}[INFO]{color.RESET} Getting IP Address for: {color.YELLOW + user_input + color.RESET}...")
     vm_id = get_vmid(user_input)
     ip = get_IP(vm_id)
-    print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----\n{user_input}\t{vm_id}\t{ip}")
-    return
+    student_list.append({"netID": user_input, "VM_ID": vm_id, "IP": ip})
   else:
     try:
       with open(user_input) as student_csv:
@@ -104,6 +103,16 @@ def get_students_ip(user_input):
   print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----")
   for server in student_list:
     print(f"{server['netID']:<16s}{server['VM_ID']}\t{server['IP']}")
+  create_csv = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to create an output .csv for the Reverse Proxy? (Y/N): ")
+  if create_csv in ["Y", "y"]:
+    create_csv(student_list)
+
+def create_csv(student_list):
+  with open('reverse_proxy.csv', 'w') as out:
+    wr = csv.writer(out, quoting=csv.QUOTE_ALL)
+    wr.writerow("IP_ADDR\tNAME")
+    for student in student_list:
+      wr.writerow(student["IP"], student["netID"])
 
 def list(NETID="all_students"):
   """
