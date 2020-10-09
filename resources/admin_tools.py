@@ -60,7 +60,7 @@ def get_students_ip(user_input):
     container_ids = [row for row in csv.reader(container_ids_string.splitlines())]
     student_list = []
     for container_id in container_ids:
-      print(f"{color.YELLOW}[INFO]{color.RESET} Getting IP address for: {color.YELLOW + server['netID'] + color.RESET}", end="")
+      print(f"{color.YELLOW}[INFO]{color.RESET} Getting IP address for: {color.YELLOW + str(container_id[0]) + color.RESET}", end="")
       temp_student = {}
       temp_student["IP"] = get_IP(container_id[0])
       temp_student["netID"] = get_netid(container_id[0][1:])
