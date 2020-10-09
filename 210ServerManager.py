@@ -46,6 +46,8 @@ if __name__ == "__main__":
   admin.add_argument('-e','--enter', type=str, action='store', metavar='NETID', nargs=1, help='enter a student\'s live server')
   admin.add_argument('-m','--move', type=str, action='store', metavar='NETID', nargs=1, help='move a live server to a different IP')
   admin.add_argument('-l','--list', type=str, action='store', metavar='NETID', nargs='?', const='all_students', help='display a list of NetID, IP, and VM ID')
+  admin.add_argument('-o','--out', type=str, action='store', metavar='OUTFILE', nargs='?', const='all_students', help='outputs NetIDs and IPs to .csv')
+
 
   parser.add_argument('-h','--help', action='help', help='show this help message and exit')
   args = parser.parse_args()
@@ -64,9 +66,11 @@ if __name__ == "__main__":
     admin_tools.enter(args.enter[0])
   elif args.list == [] or args.list:  #no argument is required
     admin_tools.list(args.list)  #passes NetID if provided
+  elif args.out == [] or args.out:  #no argument is required
+    admin_tools.get_students_ip("all_servers")
   elif len(sys.argv) < 2:
     #more options can be created in main menu by appending to this array
-    menu_options = ["Create server(s)", "Delete Server(s)", "Enter server", "Move server", "List servers", "Get IP Address(s)"]
+    menu_options = ["Create server(s)", "Delete Server(s)", "Enter server", "Move server", "List servers", "Output CSV"]
     main_menu(menu_options) #prints main menu
     user_choice = input("Pick an action: ")
     try:

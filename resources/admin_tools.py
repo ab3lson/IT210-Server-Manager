@@ -48,10 +48,6 @@ def get_netid(container_id):
   cmd = f"pct config {container_id} | grep 'hostname: ' | awk '{{sub(/-210/,\"\"); sub(/hostname: /,\"\"); print}}'"
   return str(subprocess.check_output(cmd, shell=True).decode("utf-8"))[0:-1]
 
-def create_csv(container_id):
-
-    pass
-
 def get_students_ip(user_input):
   student_list = []
   if user_input == "all_servers":
@@ -127,7 +123,8 @@ def list(NETID="all_students"):
     #match student netID to container ID
     container_id = get_vmid(NETID)
     IP = get_IP(container_id)
-    print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----\n{NETID:<16s}\t{container_id}\t{IP}")
+    print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----")
+    print(f"{NETID:<16s}\t{container_id}\t{IP}")
   else:
     student_list = []
     cmd = "pct list | tail -n +2 | awk '{print $1}'"
@@ -145,9 +142,6 @@ def list(NETID="all_students"):
     print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----")
     for server in student_list:
       print(f"{server['netID']:<16s}{server['VM_ID']}\t{server['IP']}")
-    output_choice = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to create an output .csv for the Reverse Proxy? (Y/N): ")
-    if output_choice in ["Y", "y"]:
-      create_csv(student_list)
     
 
 def enter(NETID):
