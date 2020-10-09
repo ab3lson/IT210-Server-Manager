@@ -79,7 +79,7 @@ def delete(container_id, NETID="not supplied"):
         print(f"{color.RED}[ERROR]{color.RESET} The server for {color.YELLOW + NETID + color.RESET} could not be deleted. Response code to pct destroy was {res}")
         return
     elif res != 0:
-      print(f"\033[F{color.RED}[ERROR]{color.RESET} VM ID {color.YELLOW + str(container_id) + color.RESET} was not deleted. It was probably aleady deleted.")
+      print(f"\033[F{color.RED}[ERROR]{color.YELLOW} VM ID: {str(container_id) + color.RESET} does not exist.")
       return
     print(f"\033[F{color.GREEN}[SUCCESS]{color.RESET} Server deleted for {color.YELLOW + NETID + color.RESET}!")
   else:          #if lxc-destroy worked and the container shut down, now it can be deleted from ProxMox
