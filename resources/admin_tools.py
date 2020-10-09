@@ -103,7 +103,7 @@ def get_students_ip(user_input):
   print("")
   print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----")
   for server in student_list:
-    print(f"{server['netID']}\t{server['VM_ID']}\t{server['IP']}")
+    print(f"{server['netID']}{{:<16s}}{server['VM_ID']}\t{server['IP']}")
 
 def list(NETID="all_students"):
   """
