@@ -56,17 +56,17 @@ def get_students_ip(user_input):
   student_list = []
   if user_input == "all_servers":
     cmd = "pct list | tail -n +2 | awk '{print $1}'"
-    container_ids_string = subprocess.check_output(cmd, shell=True).decode("utf-8").replace("\n",",")[:-1]
+    container_ids_string = subprocess.check_output(cmd, shell=True).decode("utf-8")
     print("container_ids_string: ", container_ids_string)
-    container_ids = [row for row in csv.reader(container_ids_string.splitlines(), delimiter=',')]
+    container_ids = [row for row in csv.reader(container_ids_string.splitlines())]
     student_list = []
     print("Container_ids: ", container_ids)
     for container_id in container_ids:
-      print("Container_id:", container_id)
+      print("Container_id:", container_id[0])
       temp_student = {}
-      temp_student["IP"] = get_IP(container_id)
-      temp_student["netID"] = get_netid(container_id)
-      temp_student["VM_ID"] = container_id
+      temp_student["IP"] = get_IP(container_id[0])
+      temp_student["netID"] = get_netid(container_id[0])
+      temp_student["VM_ID"] = container_id[0]
       student_list.append(temp_student)
   elif ".csv" not in user_input:
     print(f"{color.BLUE}[INFO]{color.RESET} Getting IP Address for: {color.YELLOW + user_input + color.RESET}...")
