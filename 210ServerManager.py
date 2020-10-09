@@ -29,7 +29,7 @@ def main_menu(menu_options):
 
   for i, option in enumerate(menu_options):
     if i %2 == 0: print("")
-    print(f"{color.BLUE}[{i + 1}]{color.RESET} {menu_options[i]}", end='\t')
+    print(f"{color.BLUE}[{i + 1}]{color.RESET} {menu_options[i]:<20s}", end='\t')
   print("\n")
 
 
@@ -71,7 +71,7 @@ if __name__ == "__main__":
     admin_tools.get_students_ip("all_servers")
   elif len(sys.argv) < 2:
     #more options can be created in main menu by appending to this array
-    menu_options = ["Create server(s)", "Delete Server(s)", "Enter server", "Move server", "List servers", "Output CSV"]
+    menu_options = ["Create server(s)", "Delete Server(s)", "Enter server", "Move server", "List server info", "Output CSV"]
     main_menu(menu_options) #prints main menu
     user_choice = input("Pick an action: ")
     try:
