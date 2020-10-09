@@ -54,26 +54,50 @@ def create_csv(container_id):
 
 def get_students_ip(user_input):
   student_list = []
-  if ".csv" not in user_input:
-    print(f"{color.BLUE}[INFO]{color.RESET} Getting IP Address for: {color.YELLOW + user_input + color.RESET}...")
-    vm_id = get_vmid(user_input)
-    ip = get_IP(vm_id)
-    print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----\n{user_input}\t{vm_id}\t{ip}")
-    exit()
-  else:
+  if user_input == "all_servers":
     cmd = "pct list | tail -n +2 | awk '{print $1}'"
-    container_ids_string = subprocess.check_output(cmd, shell=True).decode("utf-8")
+    container_ids_string = subprocess.check_output(cmd, shell=True).decode("utf-8").replace("\n",",")[:-1]
     container_ids = [row for row in csv.reader(container_ids_string.splitlines())]
     student_list = []
     for container_id in container_ids:
       temp_student = {}
-      temp_student["ip"] = get_IP(container_id)
+      temp_student["IP"] = get_IP(container_id)
       temp_student["netID"] = get_netid(container_id)
       temp_student["VM_ID"] = container_id
       student_list.append(temp_student)
-    print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----\n")
-  for student in student_list:
-    print(f"{student['netID']}\t{student['VM_ID']}\t{student['ip']}")
+  elif ".csv" not in user_input:
+    print(f"{color.BLUE}[INFO]{color.RESET} Getting IP Address for: {color.YELLOW + user_input + color.RESET}...")
+    vm_id = get_vmid(user_input)
+    ip = get_IP(vm_id)
+    print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----\n{user_input}\t{vm_id}\t{ip}")
+    return
+  else:
+    try:
+      with open(user_input) as student_csv:
+        reader = csv.reader(student_csv, delimiter=',')
+        line_count = 0
+        for row in reader:
+          if line_count == 0:
+            line_count += 1   #jumps the reader ahead one row
+          else:
+            try:
+              netID = row[2]
+            except IndexError as e:
+              try:
+                print(f"{color.RED}[ERROR]{color.RESET} students.csv was formatted incorrectly. At least one row probably has less than three values. \nThe problem is in the line starting with: {row[0]}:",e)
+              except:
+                print(f"{color.RED}[ERROR]{color.RESET} students.csv was formatted incorrectly. At least one row probably has less than three values. Problem:",e)
+            student_list.append({"netID": netID})
+            line_count += 1
+    except Exception as e:
+      print(f"{color.RED}[ERROR]{color.RESET} There was an error with the .csv: {e}")
+      exit()
+    for server in student_list:
+      server["VM_ID"] = get_vmid(server["netID"])
+      server["IP"] = get_IP(server["VM_ID"])
+  print(f"NetID\t\tVM ID\tIP\n-----\t\t----\t----\n")
+  for server in student_list:
+    print(f"{server['netID']}\t{server['VM_ID']}\t{server['IP']}")
 
 def list(NETID="all_students"):
   """
@@ -172,6 +196,10 @@ def menu(menu_opt="none"):
   elif menu_opt == "list":
     list()
   elif menu_opt == "ip":
-    user_input = input(f"{color.PURPLE}[QUESTION]{color.RESET} What is the NetID or the file path for the .csv containing multiple students?: ")
-    get_students_ip(user_input)
+    all_servers = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to get the IP for all servers (Y for Reverse Proxy setup)? (Y/N): ")
+    if all_servers in ["Y","y"]:
+      get_students_ip("all_servers")
+    else:
+      user_input = input(f"{color.PURPLE}[QUESTION]{color.RESET} What is the NetID or the file path for the .csv containing multiple students?: ")
+      get_students_ip(user_input)
   else: exit()
