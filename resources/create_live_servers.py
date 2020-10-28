@@ -115,10 +115,10 @@ def create_multiple(FILENAME, START_IP=START_IP):
   """
 
   student_list = []
-  if ".csv" not in FILENAME:
-    print(f"{color.RED}[ERROR]{color.RESET} The supplied filename, {FILENAME} does not appear to be a .csv file.")
-    exit()
   full_path = os.path.expanduser(FILENAME)
+  if ".csv" not in FILENAME:
+    print(f"{color.RED}[ERROR]{color.RESET} The supplied filename, {full_path} does not appear to be a .csv file.")
+    exit()
   with open(full_path) as student_csv:
     reader = csv.reader(student_csv, delimiter=',')
     line_count = 0
@@ -186,11 +186,11 @@ def menu():
   """
   user_choice = input(f"{color.PURPLE}[QUESTION]{color.RESET} Do you want to create more than one server? (Y/N): ")
   if user_choice in ["Y", "y"]:
-    print(f"{color.BLUE}[INFO]{color.RESET} You can import a .csv file of students to create live servers for.\nIt should be in the following format: {color.YELLOW}LAST_NAME,FIRSTNAME,NETID{color.RESET}")
-    FILENAME = input(f"{color.PURPLE}[QUESTION]{color.RESET} What is the path of the student list .csv file?")
+    print(f"{color.BLUE}[INFO]{color.RESET} You can import a .csv file of students to create live servers for.\nIt should be in the following format: {color.YELLOW}LAST_NAME,FIRST_NAME,NETID{color.RESET}")
+    FILENAME = input(f"{color.PURPLE}[QUESTION]{color.RESET} What is the path of the student list .csv file?: ")
     create_multiple(FILENAME)
   elif user_choice in ["N", "n"]:
-    NETID = input(f"{color.PURPLE}[QUESTION]{color.RESET} What is the NetID that you want to create?): ")
+    NETID = input(f"{color.PURPLE}[QUESTION]{color.RESET} What is the NetID that you want to create?: ")
     create_one(NETID)
   else: exit()
 
