@@ -118,7 +118,8 @@ def create_multiple(FILENAME, START_IP=START_IP):
   if ".csv" not in FILENAME:
     print(f"{color.RED}[ERROR]{color.RESET} The supplied filename, {FILENAME} does not appear to be a .csv file.")
     exit()
-  with open(FILENAME) as student_csv:
+  full_path = os.path.expanduser(FILENAME)
+  with open(full_path) as student_csv:
     reader = csv.reader(student_csv, delimiter=',')
     line_count = 0
     for row in reader:
